@@ -48,9 +48,13 @@ def page_search_handler(input_movie_sn, web_url = 'avio.pw'):
 
     return rtn_movie_base_info
 
-# rtn = page_search_handler('ABP-135')
+# rtn = page_search_handler('ABS-221')
 # print(rtn)
-# return: {'sn': 'ABP-135', 'preview_pic': 'https://jp.netcdn.space/digital/video/118abp00135/118abp00135ps.jpg', 'url': 'https://avio.pw/cn/movie/486t'}
+# return: {
+#   'sn': 'ABS-221',
+#   'url': 'https://avio.pw/cn/movie/1noy',
+#   'preview_pic': 'https://jp.netcdn.space/digital/video/118abs00221/118abs00221ps.jpg'
+# }
 
 
 def page_detail_handler(movie_sn, url):
@@ -134,7 +138,31 @@ def page_detail_handler(movie_sn, url):
     
     return rtn_detail, actors_info
 
-# rtn = page_detail_handler('ABP-135', 'https://avio.pw/cn/movie/486t')
+# rtn = page_detail_handler('ABS-221', 'https://avio.pw/cn/movie/1noy')
 # print(rtn)
-# return: ({'big_image': 'https://jp.netcdn.space/digital/video/118abp00135/118abp00135pl.jpg', 'producers': 'プレステージ', 'director': 'マンハッタン木村', 'series': '天然成分由来○○汁100％', 'actors': ['芽森しずく'], 'genres': ['多P', '巨乳', '单体作品', '高画质'], 'title': '天然成分由来 芽森しずく汁120%', 'publisher': 'ABSOLUTELY PERFECT', 'movie_time': '130分钟'}, {'芽森しずく': 'https://avio.pw/cn/star/mft'})
-
+# return: (
+#   {
+#       'big_image': 'https://jp.netcdn.space/digital/video/118abs00221/118abs00221pl.jpg',
+#       'genres': ['多P', '单体作品', '潮吹'],
+#       'publisher': 'ABSOLUTE',
+#       'series': '天然成分由来○○汁100％',
+#       'sample_pic': [
+#           'https://jp.netcdn.space/digital/video/118abs00221/118abs00221jp-1.jpg',
+#           'https://jp.netcdn.space/digital/video/118abs00221/118abs00221jp-2.jpg',
+#           'https://jp.netcdn.space/digital/video/118abs00221/118abs00221jp-3.jpg',
+#           'https://jp.netcdn.space/digital/video/118abs00221/118abs00221jp-4.jpg',
+#           'https://jp.netcdn.space/digital/video/118abs00221/118abs00221jp-5.jpg',
+#           'https://jp.netcdn.space/digital/video/118abs00221/118abs00221jp-6.jpg',
+#           'https://jp.netcdn.space/digital/video/118abs00221/118abs00221jp-7.jpg',
+#           'https://jp.netcdn.space/digital/video/118abs00221/118abs00221jp-8.jpg',
+#           'https://jp.netcdn.space/digital/video/118abs00221/118abs00221jp-9.jpg'
+#       ],
+#       'producers': 'プレステージ',
+#       'movie_time': '118分钟',
+#       'actors': ['あやみ旬果'],
+#       'title': '天然成分由来あやみ旬果汁100％ あやみ旬果の体液'
+#   },
+#   {
+#       'あやみ旬果': 'https://avio.pw/cn/star/2yl'
+#   }
+# )
