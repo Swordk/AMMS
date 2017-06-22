@@ -18,6 +18,7 @@ SOURCES += \
     EventObject.cpp \
     TableWidget.cpp \
     ActorsListWidget.cpp \
+    MovieWallWidget.cpp \
     AMMSAppWindow.cpp \
     AMMS.cpp
 
@@ -29,6 +30,7 @@ HEADERS  += \
     EventObject.h \
     TableWidget.h \
     ActorsListWidget.h \
+    MovieWallWidget.h \
     AMMSAppWindow.h \
     AMMS.h
 

@@ -12,9 +12,12 @@
 #include <vector>
 #include <QObject>
 #include <QCloseEvent>
+#include <QMouseEvent>
 #include <QMainWindow>
+#include <QListWidget>
 #include "EventProcesser.h"
 #include "ActorsListWidget.h"
+#include "MovieWallWidget.h"
 
 namespace amms {
 
@@ -31,6 +34,11 @@ namespace amms {
 
         void Init();
 
+    // Event 处理
+    public:
+        virtual void resizeEvent(QResizeEvent* pcEvent);
+        virtual void mouseReleaseEvent(QMouseEvent* pcEvent);
+
     ///子类重载方法
     protected:
         //
@@ -38,6 +46,7 @@ namespace amms {
 
     private:
         CActorsListWidget*  m_pcActorsList;
+        CMovieWallWidget*   m_pcMovieWall;
     };
 }
 
