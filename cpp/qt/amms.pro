@@ -16,6 +16,8 @@ SOURCES += \
     EventProcesser.cpp \
     EventRouter.cpp \
     EventObject.cpp \
+    TableWidget.cpp \
+    ActorsListWidget.cpp \
     AMMSAppWindow.cpp \
     AMMS.cpp
 
@@ -25,6 +27,8 @@ HEADERS  += \
     EventProcesser.h \
     EventRouter.h \
     EventObject.h \
+    TableWidget.h \
+    ActorsListWidget.h \
     AMMSAppWindow.h \
     AMMS.h
 

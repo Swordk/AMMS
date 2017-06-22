@@ -14,6 +14,7 @@
 #include <QCloseEvent>
 #include <QMainWindow>
 #include "EventProcesser.h"
+#include "ActorsListWidget.h"
 
 namespace amms {
 
@@ -32,8 +33,11 @@ namespace amms {
 
     ///子类重载方法
     protected:
-            //
-            virtual void _ProcessEvent(CEventPtr& pcEvent) override;
+        //
+        virtual void _ProcessEvent(CEventPtr& pcEvent) override;
+
+    private:
+        CActorsListWidget*  m_pcActorsList;
     };
 }
 

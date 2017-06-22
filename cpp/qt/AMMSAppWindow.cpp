@@ -19,12 +19,12 @@ namespace amms {
         QSplitter* pcMainSplitter = new QSplitter(Qt::Horizontal, this);
         pcMainSplitter->setHandleWidth(1);
         pcMainSplitter->setStyleSheet("QSplitter::handle { background-color: lightgray }"); //设置分界线的样式
-        QLabel* lab1 = new QLabel(pcMainSplitter);
+        m_pcActorsList = new CActorsListWidget(pcMainSplitter);
+        m_pcActorsList->Init();
+        m_pcActorsList->setMaximumWidth(m_pcActorsList->GetTotalWidth() + 30);
+
         QLabel* lab2 = new QLabel(pcMainSplitter);
-        lab1->setText("123");
         lab2->setText("456");
-        pcMainSplitter->setStretchFactor(0, 1);
-        pcMainSplitter->setStretchFactor(1, 4);
 
         this->setCentralWidget(pcMainSplitter);
         this->showMaximized();
