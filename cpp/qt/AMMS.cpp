@@ -28,7 +28,8 @@ int CAMMS::Run(int argc, char *argv[])
     qRegisterMetaType<CEventObject>("CEventObject");
     qRegisterMetaType<bgg::date>("boost_date");
 
-    QSplashScreen splash(QPixmap("D:/Documents/Doc/01.Dev/Projects/Others/AMMS/cpp/qt/amms.png"));
+    // QSplashScreen splash(QPixmap("D:/Documents/Doc/01.Dev/Projects/Others/AMMS/cpp/qt/amms.png"));
+    QSplashScreen splash(QPixmap("./amms.png"));
     splash.setDisabled(true); //禁用用户的输入事件响应
     splash.show();
     splash.showMessage(QStringLiteral("内存数据库管理器.加载模块数据.正在启动中...."),
