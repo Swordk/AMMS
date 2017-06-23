@@ -16,4 +16,12 @@ namespace amms {
         this->setSpacing(5);
     }
 
+    void CMovieWallWidget::AddItem(const QString& qstrTxt, const QString& qstrPic)
+    {
+        QPixmap pix(qstrPic);
+        // QIcon ic = QIcon(pix.scaled(212, 300));
+        QIcon ic(pix);
+        QListWidgetItem* item = new QListWidgetItem(ic, qstrTxt, this);
+    }
+
 }

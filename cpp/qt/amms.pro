@@ -13,6 +13,7 @@ TEMPLATE = app
 RC_ICONS = amms.ico
 
 SOURCES += \
+    MDataBase.cpp \
     EventProcesser.cpp \
     EventRouter.cpp \
     EventObject.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
     AMMS.cpp
 
 HEADERS  += \
+    MDataBase.h \
     Typedef.h \
     Event.h \
     EventProcesser.h \

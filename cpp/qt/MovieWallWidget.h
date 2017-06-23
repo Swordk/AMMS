@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include <QListWidget>
+#include <QString>
 #include <QSize>
+#include <QListWidget>
 
 namespace amms {
 
@@ -24,6 +25,8 @@ namespace amms {
 
         //
         void Init(QSize frameSize);
+
+        void AddItem(const QString& qstrTxt, const QString& qstrPic);
     };
 }
 

@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <QObject>
+#include <QString>
 #include <QCloseEvent>
 #include <QMouseEvent>
 #include <QMainWindow>
@@ -38,6 +39,10 @@ namespace amms {
     public:
         virtual void resizeEvent(QResizeEvent* pcEvent);
         virtual void mouseReleaseEvent(QMouseEvent* pcEvent);
+
+
+    public slots:
+        void slotActorSelected(QString);
 
     ///子类重载方法
     protected:

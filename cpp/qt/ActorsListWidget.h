@@ -4,8 +4,12 @@
 /////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include <map>
+#include <string>
+#include <set>
 #include <QObject>
 #include <QWidget>
+#include <QString>
 #include "TableWidget.h"
 
 namespace amms {
@@ -15,11 +19,18 @@ namespace amms {
         explicit CActorsListWidget(QWidget *parent)
             : CTableWidget(parent)
         {}
-
         virtual ~CActorsListWidget(){}
 
     public:
         void Init();
+        void SetActors(const std::map<std::string, std::set<std::string> >& mapActors2Sn);
+
+    signals:
+        void signalActorSelected(QString actor);
+
+    public slots:
+        void slotCellSelected(int, int);
+
 
     };
 

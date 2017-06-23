@@ -10,8 +10,10 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QListWidgetItem>
-#include "EventObject.h"
+
 #include "AMMSAppWindow.h"
+#include "EventObject.h"
+#include "MDataBase.h"
 
 namespace amms {
 
@@ -29,6 +31,11 @@ namespace amms {
 
         this->setCentralWidget(pcMainSplitter);
         this->showMaximized();
+
+        auto mapActors2Sn = MDB()->Actors2Sn();
+        m_pcActorsList->SetActors(mapActors2Sn);
+
+        connect(m_pcActorsList, SIGNAL(signalActorSelected(QString)), this, SLOT(slotActorSelected(QString)));
     }
 
     void CAMMSAppWindow::resizeEvent(QResizeEvent* pcEvent)
@@ -42,17 +49,30 @@ namespace amms {
         QVector<QWidget*> vecs;
         for (int n=0; n < 16; ++n) {
             QString qstr = "This is " + QString::number(n);
+            m_pcMovieWall->AddItem(qstr, "d:/2.jpg");
+        }
+    }
+
+    void CAMMSAppWindow::slotActorSelected(QString qstrActor)
+    {
+        std::string strActor = qstrActor.toStdString();
+        auto setSn = MDB()->Actors2Sn(strActor);
+        if (setSn.empty())
+            return;
+        m_pcMovieWall->clear();
+        for (auto item : setSn) {
+            QString qstr = item.c_str();
             QPixmap pix("d:/2.jpg");
-            // QIcon ic = QIcon(pix.scaled(212, 300));
             QIcon ic(pix);
             QListWidgetItem* item = new QListWidgetItem(ic, qstr, m_pcMovieWall);
             m_pcMovieWall->addItem(item);
         }
     }
 
+
     void CAMMSAppWindow::_ProcessEvent(CEventPtr& pcEvent)
     {
-
+        // emit signalEventToSelf(CEventObject(v_pcEvent));
     }
 
 }
