@@ -1,0 +1,16 @@
+{
+    "Database": {
+        "db_path": "database"
+    },
+    "Movie": {
+        "movie_path": ""
+    },
+    "UI": {
+        "movie_wall": {
+            "movie_frame": {
+                "width": "510",
+                "height": "350"
+            }
+        }
+    }
+}
