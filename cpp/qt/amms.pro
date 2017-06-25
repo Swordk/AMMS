@@ -7,12 +7,12 @@
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
-
 TARGET = amms
 TEMPLATE = app
 RC_ICONS = amms.ico
 
 SOURCES += \
+    Config.cpp \
     MDataBase.cpp \
     EventProcesser.cpp \
     EventRouter.cpp \
@@ -24,6 +24,7 @@ SOURCES += \
     AMMS.cpp
 
 HEADERS  += \
+    Config.h \
     MDataBase.h \
     Typedef.h \
     Event.h \

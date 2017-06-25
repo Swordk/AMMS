@@ -3,6 +3,7 @@
 ///20170622 jason wong 创建该文件
 /////////////////////////////////////////////////////////////////////////
 
+#include <QStringList>
 #include <QApplication>
 #include <QTextCodec>
 #include <QSplashScreen>
@@ -10,6 +11,7 @@
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include "AMMS.h"
+#include "Config.h"
 #include "MDataBase.h"
 #include "EventObject.h"
 
@@ -28,7 +30,6 @@ int CAMMS::Run(int argc, char *argv[])
     qRegisterMetaType<CEventObject>("CEventObject");
     qRegisterMetaType<bgg::date>("boost_date");
 
-    // QSplashScreen splash(QPixmap("D:/Documents/Doc/01.Dev/Projects/Others/AMMS/cpp/qt/amms.png"));
     QSplashScreen splash(QPixmap("./amms.png"));
     splash.setDisabled(true); //禁用用户的输入事件响应
     splash.show();
@@ -36,6 +37,11 @@ int CAMMS::Run(int argc, char *argv[])
         Qt::AlignLeft|Qt::AlignBottom,Qt::black);
     QElapsedTimer t;
     t.start();
+
+    // 加载数据
+    CFG()->Init();
+    MDB()->Init();
+
     while(t.elapsed()<2000)
     {
         QCoreApplication::processEvents();
@@ -44,9 +50,8 @@ int CAMMS::Run(int argc, char *argv[])
     //同时创建主视图对象
     // MainWindow w;
     splash.showMessage(QStringLiteral("AMMS, 您的私人电影数据库"),Qt::AlignLeft|Qt::AlignBottom,Qt::black);
-    //预加载程序数据;
-    // loadModulesData();
-    MDB()->Init();
+
+
     //程序数据加载完毕后， 显示主视图，并结束启动画面
     // w.show();
 
@@ -70,7 +75,7 @@ using namespace amms;
 int main(int argc, char *argv[])
 {
 #ifdef WIN
-    QCoreApplication::addLibraryPath("./qtplugins");
+    QCoreApplication::addLibraryPath(".\\qtplugins");
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
