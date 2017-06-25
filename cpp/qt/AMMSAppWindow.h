@@ -35,14 +35,9 @@ namespace amms {
 
         void Init();
 
-    // Event 处理
-    public:
-        virtual void resizeEvent(QResizeEvent* pcEvent);
-        virtual void mouseReleaseEvent(QMouseEvent* pcEvent);
-
-
     public slots:
         void slotActorSelected(QString);
+        void slotMovieSelected(QString);
 
     ///子类重载方法
     protected:

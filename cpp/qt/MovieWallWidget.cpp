@@ -5,6 +5,7 @@
 /////////////////////////////////////////////////////////////////////////
 
 #include "MovieWallWidget.h"
+#include <QStringList>
 
 namespace amms {
     void CMovieWallWidget::Init(QSize frameSize)
@@ -14,6 +15,7 @@ namespace amms {
         this->setResizeMode(QListView::ResizeMode::Adjust);
         this->setMovement(QListView::Movement::Static);
         this->setSpacing(5);
+        connect(this, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotItemDoubleClicked(QListWidgetItem*)));
     }
 
     void CMovieWallWidget::AddItem(const QString& qstrTxt, const QString& qstrPic)
@@ -23,5 +25,12 @@ namespace amms {
         QIcon ic(pix);
         QListWidgetItem* item = new QListWidgetItem(ic, qstrTxt, this);
     }
-
+    void CMovieWallWidget::slotItemDoubleClicked(QListWidgetItem* item)
+    {
+        QString qstr = item->text();
+        auto listStr = qstr.split(" ");
+        if (listStr.length() < 2)
+            return;
+        emit signalItemSelected(listStr[0]);
+    }
 }

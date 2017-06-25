@@ -9,6 +9,7 @@
 #include <QString>
 #include <QSize>
 #include <QListWidget>
+#include <QListWidgetItem>
 
 namespace amms {
 
@@ -27,6 +28,12 @@ namespace amms {
         void Init(QSize frameSize);
 
         void AddItem(const QString& qstrTxt, const QString& qstrPic);
+
+    signals:
+        void signalItemSelected(QString qstrSn);
+
+    public slots:
+        void slotItemDoubleClicked(QListWidgetItem *item);
     };
 }
 

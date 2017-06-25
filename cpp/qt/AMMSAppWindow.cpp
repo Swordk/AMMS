@@ -4,7 +4,9 @@
 /////////////////////////////////////////////////////////////////////////
 
 #include <Qt>
+#include <QStringList>
 #include <QApplication>
+#include <QProcess>
 #include <QSplitter>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -12,6 +14,7 @@
 #include <QListWidgetItem>
 
 #include "AMMSAppWindow.h"
+#include "Config.h"
 #include "EventObject.h"
 #include "MDataBase.h"
 
@@ -27,7 +30,10 @@ namespace amms {
         m_pcActorsList->setMaximumWidth(m_pcActorsList->GetTotalWidth() + 30);
 
         m_pcMovieWall = new CMovieWallWidget(pcMainSplitter);
-        m_pcMovieWall->Init(QSize(240, 350));
+        QSize qsize;
+        qsize.setWidth(CFG()->nMovieFrameWidth());
+        qsize.setHeight(CFG()->nMovieFrameHeight());
+        m_pcMovieWall->Init(qsize);
 
         this->setCentralWidget(pcMainSplitter);
         this->showMaximized();
@@ -36,21 +42,7 @@ namespace amms {
         m_pcActorsList->SetActors(mapActors2Sn);
 
         connect(m_pcActorsList, SIGNAL(signalActorSelected(QString)), this, SLOT(slotActorSelected(QString)));
-    }
-
-    void CAMMSAppWindow::resizeEvent(QResizeEvent* pcEvent)
-    {
-        QSize widgetNewSize = pcEvent->size();
-        int jjj=0;
-    }
-
-    void CAMMSAppWindow::mouseReleaseEvent(QMouseEvent* pcEvent)
-    {
-        QVector<QWidget*> vecs;
-        for (int n=0; n < 16; ++n) {
-            QString qstr = "This is " + QString::number(n);
-            m_pcMovieWall->AddItem(qstr, "d:/2.jpg");
-        }
+        connect(m_pcMovieWall, SIGNAL(signalItemSelected(QString)), this, SLOT(slotMovieSelected(QString)));
     }
 
     void CAMMSAppWindow::slotActorSelected(QString qstrActor)
@@ -60,15 +52,34 @@ namespace amms {
         if (setSn.empty())
             return;
         m_pcMovieWall->clear();
+        QString qstrMovieDir = (CFG()->strMoviePath() + "\\").c_str();
         for (auto item : setSn) {
             QString qstr = item.c_str();
-            QPixmap pix("d:/2.jpg");
+            QStringList qlist = qstr.split('-');
+            if (qlist.length() != 2)
+                continue;
+            QString qstrPic = qstrMovieDir + qlist[0] + "\\" + qstr + "\\" + qstr + ".jpg";
+            auto itMovie = MDB()->Movies(qstr.toStdString());
+            if (itMovie.count("date"))
+                qstr += ("     " + *(itMovie.at("date").begin())).c_str();
+            QPixmap pix(qstrPic);
             QIcon ic(pix);
             QListWidgetItem* item = new QListWidgetItem(ic, qstr, m_pcMovieWall);
             m_pcMovieWall->addItem(item);
         }
     }
 
+    void CAMMSAppWindow::slotMovieSelected(QString qstrSn)
+    {
+        QString qstrMovieDir = (CFG()->strMoviePath() + "\\").c_str();
+        QStringList qlist = qstrSn.split('-');
+        if (qlist.length() != 2)
+            return;
+        QString qstrMoviePath = qstrMovieDir + qlist[0] + "\\" + qstrSn + "\\" ;
+        QProcess p(0);
+        p.start("explorer.exe", QStringList(qstrMoviePath));
+        p.waitForFinished();    //等待完成
+    }
 
     void CAMMSAppWindow::_ProcessEvent(CEventPtr& pcEvent)
     {
