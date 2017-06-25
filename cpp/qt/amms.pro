@@ -9,7 +9,7 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 TARGET = amms
 TEMPLATE = app
-RC_ICONS = amms.ico
+RC_ICONS = amms2.ico
 
 SOURCES += \
     Config.cpp \
