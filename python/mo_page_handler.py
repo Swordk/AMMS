@@ -5,6 +5,7 @@
 
 import requests
 import re
+import time
 from lxml import html
 import string_handler as str_handler
 
@@ -24,7 +25,16 @@ def page_search_handler(input_movie_sn, web_url = 'avio.pw'):
     movie_n = str_handler.alnum_only(input_movie_sn)
     url = 'https://' + web_url + '/cn/search/' + movie_s + movie_n
 
-    html_page = requests.get(url)
+    html_page = None
+    while True:
+        html_page = requests.get(url)
+        if html_page.ok == True:
+            break
+        else:
+            print('requests.get failed, retry ...')
+            time.sleep(1)
+
+
     html_tree = html.fromstring(html_page.text)
 
     hrefs_all = html_tree.xpath(u'//a[@class="movie-box"]')
@@ -61,7 +71,15 @@ def page_detail_handler(movie_sn, url):
     '''
     @introducation: 处理详情页面
     '''
-    html_page = requests.get(url)
+    html_page = None
+    while True:
+        html_page = requests.get(url)
+        if html_page.ok == True:
+            break
+        else:
+            print('requests.get failed, retry ...')
+            time.sleep(1)
+
     html_tree = html.fromstring(html_page.text)
     
     img_big = html_tree.xpath(u'//a[@class="bigImage"]')[0]
