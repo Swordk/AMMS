@@ -8,17 +8,11 @@ import sys
 import time
 import json
 import codecs
+from multiprocessing import Process
+
 import mo_page_handler as mph
 
-if __name__ == '__main__':
-    movie_path = './'
-    if len(sys.argv) > 2:
-        print('Usage:')
-        print('    ' + sys.argv[0] + ' movie_path')
-        exit(1)
-    if len(sys.argv) == 2:
-        movie_path = sys.argv[1] + '/'
-    
+def process(movie_path):
     dict_movies_info = {}
     dict_movies_pics = {}
     dict_actors_info = {}
@@ -70,13 +64,43 @@ if __name__ == '__main__':
     
     # 生成文件
     movies_json = json.dumps(dict_movies_info, ensure_ascii=False, indent=2)
-    with codecs.open('movies.json', 'w', 'utf-8') as f:
+    with codecs.open(movie_path + '/movies.json', 'w', 'utf-8') as f:
         f.write(movies_json)
     
     actors_json = json.dumps(dict_actors_info, ensure_ascii=False, indent=2)
-    with codecs.open('actors.json', 'w', 'utf-8') as f:
+    with codecs.open(movie_path + '/actors.json', 'w', 'utf-8') as f:
         f.write(actors_json)
 
     pics_json = json.dumps(dict_movies_pics, ensure_ascii=False, indent=2)
-    with codecs.open('pics.json', 'w', 'utf-8') as f:
+    with codecs.open(movie_path + '/pics.json', 'w', 'utf-8') as f:
         f.write(pics_json)
+    return dict_movies_info, dict_actors_info, dict_movies_pics
+
+
+if __name__ == '__main__':
+    movie_path = './'
+    if len(sys.argv) > 2:
+        print('Usage:')
+        print('    ' + sys.argv[0] + ' movie_path')
+        exit(1)
+    if len(sys.argv) == 2:
+        movie_path = sys.argv[1] + '/'
+    
+    # movie_path = 'X:\\SublimeText3\\Data\\d\\2\\00.done\\0'
+    print(movie_path)
+
+    # dict_movies_info, dict_actors_info, dict_movies_pics = process(movie_path)
+    folders_all = os.listdir(movie_path)
+    print(folders_all)
+    for folder in sorted(folders_all):
+        folder = movie_path + "/" + folder
+        print(folder)
+        if os.path.isdir(folder):
+            # p = Process(target=process, args=(folder,))
+            # p.start()
+            process(folder)
+    
+    print('done')
+    # while (1):
+    #     time.sleep(5)
+    #     print('waiting for finish')
