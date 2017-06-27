@@ -42,32 +42,32 @@ def try_to_download(url, file_name):
         pass
     pass
 
-file_path = './'
-logfiles_all = os.listdir(file_path)
-for logfilename in sorted(logfiles_all):
-    log_file_suffix = '_pic.log'
-    if logfilename.find(log_file_suffix) != -1:
-        movie_sn = logfilename[0:len(logfilename) - len(log_file_suffix)]
-        print(movie_sn)
-        with open(logfilename, 'r') as logfile:
-            line_index = 0
-            for eachline in logfile:
-                line_split = eachline.split(': ')
-                # print(line_split)
-                if len(line_split) != 2:
-                    continue
-                if line_split[0] == 'big_pic':
-                    # while download_img(line_split[1], file_path + movie_sn + '/' + movie_sn + '.jpg') == False:
-                    try_to_download(line_split[1], file_path + movie_sn + '/' + movie_sn + '.jpg')
-                    time.sleep(1)
-                elif line_split[0] == 'sample_pic':
-                    sample_pics_all = line_split[1].split(',')
-                    pic_index = 1
-                    for sample_pic_url in sample_pics_all:
-                        sample_pic_file = movie_sn + '_s_%02d.jpg' % pic_index
-                        pic_index += 1
-                        # while download_img(sample_pic_url, file_path + movie_sn + '/' + sample_pic_file) == False:
-                        try_to_download(sample_pic_url, file_path + movie_sn + '/' + sample_pic_file)
-                        time.sleep(1)
-                time.sleep(3)
-        time.sleep(3)
+# file_path = './'
+# logfiles_all = os.listdir(file_path)
+# for logfilename in sorted(logfiles_all):
+#     log_file_suffix = '_pic.log'
+#     if logfilename.find(log_file_suffix) != -1:
+#         movie_sn = logfilename[0:len(logfilename) - len(log_file_suffix)]
+#         print(movie_sn)
+#         with open(logfilename, 'r') as logfile:
+#             line_index = 0
+#             for eachline in logfile:
+#                 line_split = eachline.split(': ')
+#                 # print(line_split)
+#                 if len(line_split) != 2:
+#                     continue
+#                 if line_split[0] == 'big_pic':
+#                     # while download_img(line_split[1], file_path + movie_sn + '/' + movie_sn + '.jpg') == False:
+#                     try_to_download(line_split[1], file_path + movie_sn + '/' + movie_sn + '.jpg')
+#                     time.sleep(1)
+#                 elif line_split[0] == 'sample_pic':
+#                     sample_pics_all = line_split[1].split(',')
+#                     pic_index = 1
+#                     for sample_pic_url in sample_pics_all:
+#                         sample_pic_file = movie_sn + '_s_%02d.jpg' % pic_index
+#                         pic_index += 1
+#                         # while download_img(sample_pic_url, file_path + movie_sn + '/' + sample_pic_file) == False:
+#                         try_to_download(sample_pic_url, file_path + movie_sn + '/' + sample_pic_file)
+#                         time.sleep(1)
+#                 time.sleep(3)
+#         time.sleep(3)
