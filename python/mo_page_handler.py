@@ -115,13 +115,12 @@ def page_detail_handler(movie_sn, url):
                 child_text = detail_info.xpath(u'span/text()')
                 if len(child_text) == 2:
                     if child_text[0] == u'识别码:':
-                        continue
                         rtn_detail[u'sn'] = child_text[1]
+                        continue
                     else:
                         print('new 2 field')
                 elif len(child_text) == 1:
                     if child_text[0] == u'发行时间:':
-                        continue
                         key_str = u'date'
                     elif child_text[0] == u'长度:':
                         key_str = u'movie_time'
