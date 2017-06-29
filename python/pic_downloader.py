@@ -9,6 +9,7 @@ import socket
 import urllib
 import urllib.request as request
 import time
+import traceback
 
 def download_img(url, file_name):
     socket.setdefaulttimeout(15)
@@ -38,6 +39,9 @@ def try_to_download(url, file_name):
                 break
         except urllib.error.URLError:
             print('urllib.URLError')
+            time.sleep(1)
+        except :
+            traceback.print_exc()
             time.sleep(1)
         pass
     pass
