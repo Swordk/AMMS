@@ -183,3 +183,60 @@ def page_detail_handler(movie_sn, url):
 #       'あやみ旬果': 'https://avio.pw/cn/star/2yl'
 #   }
 # )
+
+
+
+def page_actor_handler(url):
+    '''
+    处理演员页面
+    '''
+    html_page = None
+    while True:
+        html_page = requests.get(url)
+        if html_page.ok == True:
+            break
+        else:
+            print('requests.get failed, retry ...')
+            time.sleep(1)
+    
+    html_tree = html.fromstring(html_page.text)
+    avatar_box = html_tree.xpath(u'//div[@class="avatar-box"]')
+    actor_img = avatar_box[0].xpath(u'div[@class="photo-frame"]/img')
+    actor_img_url = actor_img[0].get('src')
+
+    dict_actor_info = {}
+    actor_info_details = avatar_box[0].xpath(u'div[@class="photo-info"]/p/text()')
+    for actor_info in actor_info_details:
+        splits = actor_info.split(': ')
+        if len(splits) != 2:
+            continue
+        if splits[0] == '生日':
+            dict_actor_info['birth_day'] = splits[1]
+        elif splits[0] == '身高':
+            dict_actor_info['height'] = splits[1]
+        elif splits[0] == '罩杯':
+            dict_actor_info['cup'] = splits[1]
+        elif splits[0] == '胸围':
+            dict_actor_info['bust'] = splits[1]
+        elif splits[0] == '腰围':
+            dict_actor_info['waist'] = splits[1]
+        elif splits[0] == '臀围':
+            dict_actor_info['hip'] = splits[1]
+        elif splits[0] == '爱好':
+            dict_actor_info['hobby'] = splits[1].split(u'、')
+    return actor_img_url, dict_actor_info
+
+# julia
+# print(page_actor_handler('https://avio.pw/cn/star/2de'))
+# return: (
+#   'https://jp.netcdn.space/mono/actjpgs/julia.jpg',
+#   {
+#       'birth_day': '1987-05-25',
+#       'height': '158cm',
+#       'cup': 'J',
+#       'bust': '102cm',
+#       'waist': '55cm',
+#       'hip': '84cm',
+#       'hobby': ['自分磨き', '簿記二級']
+#   }
+# )
