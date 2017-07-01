@@ -34,8 +34,8 @@ if __name__ == '__main__':
         actor_pic_url, actor_info = mph.page_actor_handler(actor_url)
         dict_actors_info_all[actor_name] = actor_info
 
-        # pic_file_name = actor_pic_path + '/' + actor_name + '.jpg'
-        # picd.try_to_download(actor_pic_url, pic_file_name)
+        pic_file_name = actor_pic_path + '/' + actor_name + '.jpg'
+        picd.try_to_download(actor_pic_url, pic_file_name)
     
 
     actors_json = json.dumps(dict_actors_info_all, ensure_ascii=False, indent=2)
