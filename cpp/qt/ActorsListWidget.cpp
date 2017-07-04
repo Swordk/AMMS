@@ -8,6 +8,8 @@
 #include <QMap>
 #include <QHeaderView>
 
+#include "MDataBase.h"
+
 namespace amms {
     void CActorsListWidget::Init()
     {
@@ -16,10 +18,9 @@ namespace amms {
 
         this->AddColumn("ActorName", "ActorName", 120);
         this->AddColumn("Grand", "Grand", 50);
-        this->AddColumn("BirthDay", "BirthDay", 70);
+        this->AddColumn("BirthDay", "BirthDay", 90);
         this->AddColumn("Cup", "Cup", 40);
         this->AddColumn("Height", "Height", 60);
-        this->AddColumn("Weight", "Weight", 60);
         this->verticalHeader()->setHidden(true);                    // 隐藏行号
         this->InitColumns(true);
         this->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -36,10 +37,22 @@ namespace amms {
 
         int nRowIndex = 0;
         for (auto& item : mapActors2Sn) {
+            std::string strActorName = item.first;
+            auto actorInfo = MDB()->ActorInfo(strActorName);
+
             this->AddRow();
             auto pcItem = this->item(nRowIndex, 0);
             if (pcItem)
-                pcItem->setText(item.first.c_str());
+                pcItem->setText(strActorName.c_str());
+            pcItem = this->item(nRowIndex, 2);
+            if (pcItem)
+                pcItem->setText(actorInfo.strBirthDay.c_str());
+            pcItem = this->item(nRowIndex, 3);
+            if (pcItem)
+                pcItem->setText(actorInfo.strCup.c_str());
+            pcItem = this->item(nRowIndex, 4);
+            if (pcItem)
+                pcItem->setText(actorInfo.strHeight.c_str());
             ++nRowIndex;
         }
     }

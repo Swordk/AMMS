@@ -11,10 +11,40 @@
 
 namespace amms {
 
+    struct SMovieInfo {
+        std::string             strSn;
+        std::string             strTitle;
+        std::string             strDate;
+        std::set<std::string>   setGenres;
+        std::set<std::string>   setActors;
+        std::string             strDirector;
+        std::string             strProducer;
+        std::string             strPublisher;
+        int                     nMinutes;
+    };
+
+    struct SActorInfo {
+        std::string             strName;
+        std::string             strBirthDay;
+        std::string             strCup;
+        std::string             strHeight;
+        std::string             strBust;
+        std::string             strWaist;
+        std::string             strHip;
+        std::set<std::string>   setHobby;
+    };
+
+
     class CMDataBase {
     public:
         static CMDataBase* GetInstance();
         void Init();
+
+
+        inline SActorInfo ActorInfo(const std::string& strActorName) {
+            return mapActors[strActorName];
+        }
+
 
         inline std::map<std::string, std::set<std::string> > Actors2Sn() const {
             return mapActors2Sn;
@@ -71,26 +101,31 @@ namespace amms {
             return std::set<std::string>();
         }
 
-        inline std::map<std::string, std::map<std::string, std::set<std::string> > > Movies() const {
-            return mapMovies;
-        }
-        inline std::map<std::string, std::set<std::string> > Movies(const std::string& strSn) const {
-            if (mapMovies.count(strSn))
-                return mapMovies.at(strSn);
-            return std::map<std::string, std::set<std::string> >();
-        }
+        // inline std::map<std::string, std::map<std::string, std::set<std::string> > > Movies() const {
+        //     return mapMovies;
+        // }
+        // inline std::map<std::string, std::set<std::string> > Movies(const std::string& strSn) const {
+        //     if (mapMovies.count(strSn))
+        //         return mapMovies.at(strSn);
+        //     return std::map<std::string, std::set<std::string> >();
+        // }
 
     private:
         CMDataBase()    {}
+        void LoadMoviesInfo(const std::string& i_strDatabasePath);
+        void LoadActorsInfo(const std::string& i_strDatabasePath);
 
-        std::map<std::string, std::set<std::string> > mapActors2Sn;
-        std::map<std::string, std::set<std::string> > mapGenres2Sn;
-        std::map<std::string, std::set<std::string> > mapProducers2Sn;
-        std::map<std::string, std::set<std::string> > mapPublisher2Sn;
-        std::map<std::string, std::set<std::string> > mapS2Sn;
-        std::map<std::string, std::set<std::string> > mapSeries2Sn;
-        // sn->item->content
-        std::map<std::string, std::map<std::string, std::set<std::string> > > mapMovies;
+        std::map<std::string, SMovieInfo>               mapMovies;
+        std::map<std::string, SActorInfo>               mapActors;
+
+        std::map<std::string, std::set<std::string> >   mapActors2Sn;
+        std::map<std::string, std::set<std::string> >   mapGenres2Sn;
+        std::map<std::string, std::set<std::string> >   mapProducers2Sn;
+        std::map<std::string, std::set<std::string> >   mapPublisher2Sn;
+        std::map<std::string, std::set<std::string> >   mapDirector2Sn;
+        std::map<std::string, std::set<std::string> >   mapS2Sn;
+        std::map<std::string, std::set<std::string> >   mapSeries2Sn;
+
     };
 
 #define MDB CMDataBase::GetInstance

@@ -59,9 +59,9 @@ namespace amms {
             if (qlist.length() != 2)
                 continue;
             QString qstrPic = qstrMovieDir + qlist[0] + "\\" + qstr + "\\" + qstr + ".jpg";
-            auto itMovie = MDB()->Movies(qstr.toStdString());
-            if (itMovie.count("date"))
-                qstr += ("     " + *(itMovie.at("date").begin())).c_str();
+            // auto itMovie = MDB()->Movies(qstr.toStdString());
+            // if (itMovie.count("date"))
+            //     qstr += ("     " + *(itMovie.at("date").begin())).c_str();
             QPixmap pix(qstrPic);
             QIcon ic(pix);
             QListWidgetItem* item = new QListWidgetItem(ic, qstr, m_pcMovieWall);

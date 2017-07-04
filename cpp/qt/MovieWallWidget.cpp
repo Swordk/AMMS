@@ -29,7 +29,7 @@ namespace amms {
     {
         QString qstr = item->text();
         auto listStr = qstr.split(" ");
-        if (listStr.length() < 2)
+        if (listStr.length() < 1)
             return;
         emit signalItemSelected(listStr[0]);
     }
