@@ -18,6 +18,7 @@
 #include <QListWidget>
 #include "EventProcesser.h"
 #include "ActorsListWidget.h"
+#include "ActorInfoWidget.h"
 #include "MovieWallWidget.h"
 
 namespace amms {
@@ -46,6 +47,7 @@ namespace amms {
 
     private:
         CActorsListWidget*  m_pcActorsList;
+        CActorInfoWidget*   m_pcActorInfoWidget;
         CMovieWallWidget*   m_pcMovieWall;
     };
 }

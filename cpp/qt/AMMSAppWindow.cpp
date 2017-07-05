@@ -7,9 +7,10 @@
 #include <QStringList>
 #include <QApplication>
 #include <QProcess>
-#include <QSplitter>
 #include <QWidget>
+#include <QSplitter>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QListWidgetItem>
 
@@ -29,11 +30,22 @@ namespace amms {
         m_pcActorsList->Init();
         m_pcActorsList->setMaximumWidth(m_pcActorsList->GetTotalWidth() + 30);
 
-        m_pcMovieWall = new CMovieWallWidget(pcMainSplitter);
+        QWidget* pcWidget = new QWidget(pcMainSplitter);
+        pcWidget->setStyleSheet("QWidget { border: 0px } ");
+        QVBoxLayout* pcLayout = new QVBoxLayout(pcWidget);
+        pcWidget->setLayout(pcLayout);
+
+        m_pcActorInfoWidget = new CActorInfoWidget(pcWidget);
+        m_pcActorInfoWidget->Init();
+
+        m_pcMovieWall = new CMovieWallWidget(pcWidget);
         QSize qsize;
         qsize.setWidth(CFG()->nMovieFrameWidth());
         qsize.setHeight(CFG()->nMovieFrameHeight());
         m_pcMovieWall->Init(qsize);
+
+        pcLayout->addWidget(m_pcActorInfoWidget);
+        pcLayout->addWidget(m_pcMovieWall);
 
         this->setCentralWidget(pcMainSplitter);
         this->showMaximized();
@@ -42,6 +54,7 @@ namespace amms {
         m_pcActorsList->SetActors(mapActors2Sn);
 
         connect(m_pcActorsList, SIGNAL(signalActorSelected(QString)), this, SLOT(slotActorSelected(QString)));
+        connect(m_pcActorsList, SIGNAL(signalActorSelected(QString)), m_pcActorInfoWidget, SLOT(slotSetlActor(QString)));
         connect(m_pcMovieWall, SIGNAL(signalItemSelected(QString)), this, SLOT(slotMovieSelected(QString)));
     }
 
