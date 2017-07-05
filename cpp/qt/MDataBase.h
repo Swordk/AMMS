@@ -15,6 +15,7 @@ namespace amms {
         std::string             strSn;
         std::string             strTitle;
         std::string             strDate;
+        std::string             strSeries;
         std::set<std::string>   setGenres;
         std::set<std::string>   setActors;
         std::string             strDirector;
@@ -43,6 +44,10 @@ namespace amms {
 
         inline SActorInfo ActorInfo(const std::string& strActorName) {
             return mapActors[strActorName];
+        }
+
+        inline SMovieInfo MovieInfo(const std::string& strMovieSn) {
+            return mapMovies[strMovieSn];
         }
 
 

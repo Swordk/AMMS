@@ -20,6 +20,7 @@
 #include "ActorsListWidget.h"
 #include "ActorInfoWidget.h"
 #include "MovieWallWidget.h"
+#include "MovieInfoWindow.h"
 
 namespace amms {
 
@@ -49,6 +50,7 @@ namespace amms {
         CActorsListWidget*  m_pcActorsList;
         CActorInfoWidget*   m_pcActorInfoWidget;
         CMovieWallWidget*   m_pcMovieWall;
+        CMovieInfoWindow*   m_pcMovieInfoWindow;
     };
 }
 

@@ -53,9 +53,13 @@ namespace amms {
         auto mapActors2Sn = MDB()->Actors2Sn();
         m_pcActorsList->SetActors(mapActors2Sn);
 
+        m_pcMovieInfoWindow = new CMovieInfoWindow(this);
+        m_pcMovieInfoWindow->Init();
+        m_pcMovieInfoWindow->hide();
         connect(m_pcActorsList, SIGNAL(signalActorSelected(QString)), this, SLOT(slotActorSelected(QString)));
         connect(m_pcActorsList, SIGNAL(signalActorSelected(QString)), m_pcActorInfoWidget, SLOT(slotSetlActor(QString)));
         connect(m_pcMovieWall, SIGNAL(signalItemSelected(QString)), this, SLOT(slotMovieSelected(QString)));
+
     }
 
     void CAMMSAppWindow::slotActorSelected(QString qstrActor)
@@ -84,14 +88,16 @@ namespace amms {
 
     void CAMMSAppWindow::slotMovieSelected(QString qstrSn)
     {
-        QString qstrMovieDir = (CFG()->strMoviePath() + "\\").c_str();
-        QStringList qlist = qstrSn.split('-');
-        if (qlist.length() != 2)
-            return;
-        QString qstrMoviePath = qstrMovieDir + qlist[0] + "\\" + qstrSn + "\\" ;
-        QProcess p(0);
-        p.start("explorer.exe", QStringList(qstrMoviePath));
-        p.waitForFinished();    //等待完成
+        m_pcMovieInfoWindow->SetSn(qstrSn);
+        m_pcMovieInfoWindow->show();
+        // QString qstrMovieDir = (CFG()->strMoviePath() + "\\").c_str();
+        // QStringList qlist = qstrSn.split('-');
+        // if (qlist.length() != 2)
+        //     return;
+        // QString qstrMoviePath = qstrMovieDir + qlist[0] + "\\" + qstrSn + "\\" ;
+        // QProcess p(0);
+        // p.start("explorer.exe", QStringList(qstrMoviePath));
+        // p.waitForFinished();    //等待完成
     }
 
     void CAMMSAppWindow::_ProcessEvent(CEventPtr& pcEvent)

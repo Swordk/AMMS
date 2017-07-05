@@ -21,6 +21,7 @@ SOURCES += \
     ActorsListWidget.cpp \
     ActorInfoWidget.cpp \
     MovieWallWidget.cpp \
+    MovieInfoWindow.cpp \
     AMMSAppWindow.cpp \
     AMMS.cpp
 
@@ -36,6 +37,7 @@ HEADERS  += \
     ActorsListWidget.h \
     ActorInfoWidget.h \
     MovieWallWidget.h \
+    MovieInfoWindow.h \
     AMMSAppWindow.h \
     AMMS.h
 

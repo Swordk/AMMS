@@ -49,7 +49,7 @@ int CAMMS::Run(int argc, char *argv[])
 
     //同时创建主视图对象
     // MainWindow w;
-    splash.showMessage(QStringLiteral("AMMS, 您的私人电影数据库"),Qt::AlignLeft|Qt::AlignBottom,Qt::black);
+    splash.showMessage(QStringLiteral("amms, 您的私人电影数据库"),Qt::AlignLeft|Qt::AlignBottom,Qt::black);
 
 
     //程序数据加载完毕后， 显示主视图，并结束启动画面

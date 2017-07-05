@@ -179,6 +179,11 @@ namespace amms {
                         mapActors2Sn[strActor].insert(strSn);
                     }
                 }
+                else if (strKey == "series") {
+                    std::string strSeries = itKey->value.GetString();
+                    movieInfo.strSeries = strSeries;
+                    mapSeries2Sn[strSeries].insert(strSn);
+                }
                 else if (strKey == "genres") {
                     for (auto& itValue : itKey->value.GetArray()) {
                         std::string strGenres = itValue.GetString();
