@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QProcess>
+#include <QDir>
 #include "Config.h"
 #include "MDataBase.h"
 
@@ -22,7 +23,7 @@ namespace amms {
         QWidget* pcMovieCoverWidget = new QWidget(this);
         QHBoxLayout* pcMovieCoverLayout = new QHBoxLayout(pcMovieCoverWidget);
         m_pcGraphLabelCover = new QLabel(pcMovieCoverWidget);
-        m_pcGraphLabelCover->setMinimumWidth(700);
+        m_pcGraphLabelCover->setMinimumWidth(800);
         m_pcGraphLabelCover->setMaximumWidth(1000);
 
         QWidget* pcMovieInfoWidget = new QWidget(this);
@@ -70,6 +71,7 @@ namespace amms {
         m_pcListActor = new QListWidget(this);
         m_pcListActor->setIconSize(QSize(130, 130));
         m_pcListActor->setViewMode(QListView::IconMode);
+        m_pcListActor->setMaximumHeight(155);
 
         // m_pcGraphLabelPreview = new QLabel(this);
         // m_pcLabelPreviewCount = new QLabel(this);
@@ -96,8 +98,8 @@ namespace amms {
         m_pcLabelTitle->setText(qstrTitle);
         m_pcLabelTitle->show();
 
-        m_qstrMovieDir = CFG()->strMoviePath().c_str() + QString("\\") + snSplit[0] + "\\" + qstrSn;
-        QString qstrActorPath = CFG()->strDbPath().c_str() + QString("\\actor_pic");
+        m_qstrMovieDir = CFG()->MoviePath().c_str() + QString("\\") + snSplit[0] + "\\" + qstrSn;
+        QString qstrActorPath = CFG()->DbPath().c_str() + QString("\\actor_pic");
         QPixmap pix(m_qstrMovieDir + "\\" + qstrSn + ".jpg");
         m_pcGraphLabelCover->setPixmap(pix);
         m_pcGraphLabelCover->show();

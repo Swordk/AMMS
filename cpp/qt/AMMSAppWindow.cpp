@@ -40,8 +40,8 @@ namespace amms {
 
         m_pcMovieWall = new CMovieWallWidget(pcWidget);
         QSize qsize;
-        qsize.setWidth(CFG()->nMovieFrameWidth());
-        qsize.setHeight(CFG()->nMovieFrameHeight());
+        qsize.setWidth(CFG()->MovieFrameWidth());
+        qsize.setHeight(CFG()->MovieFrameHeight());
         m_pcMovieWall->Init(qsize);
 
         pcLayout->addWidget(m_pcActorInfoWidget);
@@ -69,7 +69,7 @@ namespace amms {
         if (setSn.empty())
             return;
         m_pcMovieWall->clear();
-        QString qstrMovieDir = (CFG()->strMoviePath() + "\\").c_str();
+        QString qstrMovieDir = (CFG()->MoviePath() + "\\").c_str();
         for (auto item : setSn) {
             QString qstr = item.c_str();
             QStringList qlist = qstr.split('-');

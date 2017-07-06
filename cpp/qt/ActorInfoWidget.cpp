@@ -42,7 +42,7 @@ namespace amms {
 
     void CActorInfoWidget::slotSetlActor(QString actor)
     {
-        QString qstrDbPath = CFG()->strDbPath().c_str();
+        QString qstrDbPath = CFG()->DbPath().c_str();
         QString qstrPicFile = qstrDbPath + "/actor_pic/" + actor + ".jpg";
         QPixmap pix(qstrPicFile);
         m_pcGraphLabel->setPixmap(pix);

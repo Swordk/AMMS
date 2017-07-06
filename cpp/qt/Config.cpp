@@ -57,6 +57,13 @@ namespace amms {
                     if (strItem == "movie_path") {
                         m_strMoviePath = itItem->value.GetString();
                     }
+                    else if (strItem == "movie_file_extension") {
+
+                        for (auto& itExt : itItem->value.GetArray()) {
+                            std::string strExt = itExt.GetString();
+                            m_setMovieFileExtension.insert(strExt);
+                        }
+                    }
                 }
                 else if (strKey == "UI") {
                     if (strItem == "movie_wall") {
@@ -81,6 +88,10 @@ namespace amms {
                         }
                     }
                 }
+                else if (strKey == "Player") {
+                    if (strItem == "player_path")
+                        m_strPlayerPath = itItem->value.GetString();
+                }
             }
         }
     }
@@ -96,28 +107,34 @@ namespace amms {
         virtual ~CConfigImp()   {}
 
         virtual void Init() override;
-        virtual inline std::string strDbPath() const override {
-            std::string strConfig = userConfig.strDbPath();
+        virtual inline std::string DbPath() const override {
+            std::string strConfig = userConfig.DbPath();
             if (strConfig == "")
-                strConfig = defaultConfig.strDbPath();
+                strConfig = defaultConfig.DbPath();
             return strConfig;
         }
-        virtual inline std::string strMoviePath() const override {
-            std::string strConfig = userConfig.strMoviePath();
+        virtual inline std::string MoviePath() const override {
+            std::string strConfig = userConfig.MoviePath();
             if (strConfig == "")
-                strConfig = defaultConfig.strMoviePath();
+                strConfig = defaultConfig.MoviePath();
             return strConfig;
         }
-        virtual inline int nMovieFrameWidth() const override {
-            int nConfig = userConfig.nMovieFrameWidth();
+        virtual inline std::set<std::string> MovieFileExtension() const override {
+            std::set<std::string> setConfig = userConfig.MovieFileExtension();
+            if (setConfig.empty())
+                setConfig = defaultConfig.MovieFileExtension();
+            return setConfig;
+        }
+        virtual inline int MovieFrameWidth() const override {
+            int nConfig = userConfig.MovieFrameWidth();
             if (nConfig == 0)
-                nConfig = defaultConfig.nMovieFrameWidth();
+                nConfig = defaultConfig.MovieFrameWidth();
             return nConfig;
         }
-        virtual inline int nMovieFrameHeight() const override {
-            int nConfig = userConfig.nMovieFrameHeight();
+        virtual inline int MovieFrameHeight() const override {
+            int nConfig = userConfig.MovieFrameHeight();
             if (nConfig == 0)
-                nConfig = defaultConfig.nMovieFrameHeight();
+                nConfig = defaultConfig.MovieFrameHeight();
             return nConfig;
         }
 

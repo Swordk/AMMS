@@ -69,13 +69,13 @@ namespace amms {
         }
     };
 
-    #define LoadActors2Sn(mapActors2Sn)         CJsonFileHandler::LoadKey2List(CFG()->strDbPath() + "\\actors_2_sn.json", mapActors2Sn)
-    #define LoadGenres2Sn(mapGenres2Sn)         CJsonFileHandler::LoadKey2List(CFG()->strDbPath() + "\\genres_2_sn.json", mapGenres2Sn)
-    #define LoadProducers2Sn(mapProducers2Sn)   CJsonFileHandler::LoadKey2List(CFG()->strDbPath() + "\\producers_2_sn.json", mapProducers2Sn)
-    #define LoadPublisher2Sn(mapPublisher2Sn)   CJsonFileHandler::LoadKey2List(CFG()->strDbPath() + "\\publisher_2_sn.json", mapPublisher2Sn)
-    #define LoadS2Sn(mapS2Sn)                   CJsonFileHandler::LoadKey2List(CFG()->strDbPath() + "\\S_2_sn.json", mapS2Sn)
-    #define LaodSeries2Sn(mapSeries2Sn)         CJsonFileHandler::LoadKey2List(CFG()->strDbPath() + "\\series_2_sn.json", mapSeries2Sn)
-    #define LoadMovies(mapMovies)               CJsonFileHandler::LoadKey2Key2List(CFG()->strDbPath() + "\\movies.json", mapMovies)
+    #define LoadActors2Sn(mapActors2Sn)         CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\actors_2_sn.json", mapActors2Sn)
+    #define LoadGenres2Sn(mapGenres2Sn)         CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\genres_2_sn.json", mapGenres2Sn)
+    #define LoadProducers2Sn(mapProducers2Sn)   CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\producers_2_sn.json", mapProducers2Sn)
+    #define LoadPublisher2Sn(mapPublisher2Sn)   CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\publisher_2_sn.json", mapPublisher2Sn)
+    #define LoadS2Sn(mapS2Sn)                   CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\S_2_sn.json", mapS2Sn)
+    #define LaodSeries2Sn(mapSeries2Sn)         CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\series_2_sn.json", mapSeries2Sn)
+    #define LoadMovies(mapMovies)               CJsonFileHandler::LoadKey2Key2List(CFG()->DbPath() + "\\movies.json", mapMovies)
 }
 
 
@@ -91,7 +91,7 @@ namespace amms {
 
     void CMDataBase::Init()
     {
-        std::string strDbPath = CFG()->strDbPath();
+        std::string strDbPath = CFG()->DbPath();
         LoadMoviesInfo(strDbPath);
         LoadActorsInfo(strDbPath);
         bool bRtn = LoadActors2Sn(mapActors2Sn);

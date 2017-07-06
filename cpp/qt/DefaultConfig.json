@@ -3,7 +3,10 @@
         "db_path": "database"
     },
     "Movie": {
-        "movie_path": ""
+        "movie_path": "",
+        "movie_file_extension": [
+            "mkv","avi","wmv","rmvb","rm","mov","mpeg","mpg","dat"
+        ]
     },
     "UI": {
         "movie_wall": {
@@ -12,5 +15,8 @@
                 "height": "350"
             }
         }
+    },
+    "Player": {
+        "player_path": ""
     }
 }
