@@ -12,28 +12,24 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QListWidget>
+#include <QString>
+#include <QVector>
 
 namespace amms {
+
+    extern QVector<QString> GetMovieFiles(const QString& qstrPath);
+
     class CMovieInfoWindow : public QDialog {
         Q_OBJECT
     public:
         explicit CMovieInfoWindow(QWidget* pcParent = 0, Qt::WindowFlags flags = 0)
             : QDialog(pcParent, flags)
-            , m_pcLabelTitle(NULL)
-            , m_pcGraphLabelCover(NULL)
-            , m_pcLabel1(NULL)
-            , m_pcLabel2(NULL)
-            , m_pcLabel3(NULL)
-            , m_pcLabel4(NULL)
-            , m_pcLabel5(NULL)
-            , m_pcLabel6(NULL)
-            , m_pcLabel7(NULL)
-            , m_pcLabel8(NULL)
-            , m_pcListActor(NULL)
-            , m_pcGraphLabelPreview(NULL)
-            , m_pcLabelPreviewCount(NULL)
-            , m_pcBtnPre(NULL)
-            , m_pcBtnNext(NULL)
+            , m_pcLabelTitle(NULL), m_pcGraphLabelCover(NULL)
+            , m_pcLabel1(NULL), m_pcLabel2(NULL), m_pcLabel3(NULL), m_pcLabel4(NULL)
+            , m_pcLabel5(NULL), m_pcLabel6(NULL), m_pcLabel7(NULL), m_pcLabel8(NULL)
+            , m_pcListActors(NULL), m_pcListMovies(NULL)
+            // , m_pcGraphLabelPreview(NULL)
+            // , m_pcLabelPreviewCount(NULL)// , m_pcBtnPre(NULL)// , m_pcBtnNext(NULL)
             , m_qstrMovieDir("")
         {
         }
@@ -45,6 +41,7 @@ namespace amms {
 
     private slots:
         void slotOpenDir();
+        void slotMovieItemDoubleClicked(QListWidgetItem*);
 
     private:
         void Clear();
@@ -61,11 +58,12 @@ namespace amms {
         QLabel* m_pcLabel6;
         QLabel* m_pcLabel7;
         QLabel* m_pcLabel8;
-        QListWidget* m_pcListActor;
-        QLabel* m_pcGraphLabelPreview;
-        QLabel* m_pcLabelPreviewCount;
-        QPushButton* m_pcBtnPre;
-        QPushButton* m_pcBtnNext;
+        QListWidget* m_pcListActors;
+        QListWidget* m_pcListMovies;
+        // QLabel* m_pcGraphLabelPreview;
+        // QLabel* m_pcLabelPreviewCount;
+        // QPushButton* m_pcBtnPre;
+        // QPushButton* m_pcBtnNext;
 
         QString m_qstrMovieDir;
     };

@@ -8,8 +8,12 @@
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QListWidgetItem>
 #include <QProcess>
 #include <QDir>
+#include <QFileInfoList>
+#include <QString>
+#include <QStringList>
 #include "Config.h"
 #include "MDataBase.h"
 
@@ -47,7 +51,7 @@ namespace amms {
         m_pcLabel8->hide();
         m_pcBtnOpenDir->setText(QStringLiteral("打开目录"));
         m_pcBtnOpenDir->setStyleSheet("QPushButton { font-size: 26px; font-weight:normal; color: pink; border: 0px } "
-                                      "QPushButton:hover { font-weight:bold; } "
+                                      "QPushButton:hover { font-weight:bold; color: rgb(128, 128, 255)} "
                                       "QPushButton:pressed { font-weight:bold; color: red } ");
         m_pcLabel7->setWordWrap(true);
         connect(m_pcBtnOpenDir, SIGNAL(clicked()), this, SLOT(slotOpenDir()));
@@ -68,10 +72,15 @@ namespace amms {
         pcMovieCoverWidget->setLayout(pcMovieCoverLayout);
 
 
-        m_pcListActor = new QListWidget(this);
-        m_pcListActor->setIconSize(QSize(130, 130));
-        m_pcListActor->setViewMode(QListView::IconMode);
-        m_pcListActor->setMaximumHeight(155);
+        m_pcListActors = new QListWidget(this);
+        m_pcListActors->setIconSize(QSize(130, 130));
+        m_pcListActors->setViewMode(QListView::IconMode);
+        m_pcListActors->setFixedHeight(160);
+
+        m_pcListMovies = new QListWidget(this);
+        m_pcListMovies->setViewMode(QListView::ListMode);
+
+        connect(m_pcListMovies, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotMovieItemDoubleClicked(QListWidgetItem*)));
 
         // m_pcGraphLabelPreview = new QLabel(this);
         // m_pcLabelPreviewCount = new QLabel(this);
@@ -80,7 +89,8 @@ namespace amms {
 
         pcLayout->addWidget(m_pcLabelTitle);
         pcLayout->addWidget(pcMovieCoverWidget);
-        pcLayout->addWidget(m_pcListActor);
+        pcLayout->addWidget(m_pcListActors);
+        pcLayout->addWidget(m_pcListMovies);
         this->setLayout(pcLayout);
     }
 
@@ -139,14 +149,23 @@ namespace amms {
         }
 
         if (movieInfo.setActors.empty() == false) {
-            m_pcListActor->clear();
+            m_pcListActors->clear();
             for (auto& itActor : movieInfo.setActors) {
                 QPixmap pix(qstrActorPath + "\\" + QString(itActor.c_str()) + ".jpg");
                 QIcon ic(pix);
-                QListWidgetItem* item = new QListWidgetItem(ic, itActor.c_str(), m_pcListActor);
-                m_pcListActor->addItem(item);
+                QListWidgetItem* item = new QListWidgetItem(ic, itActor.c_str(), m_pcListActors);
+                m_pcListActors->addItem(item);
             }
-            m_pcListActor->show();
+            m_pcListActors->show();
+        }
+
+        auto vecMovies = GetMovieFiles(m_qstrMovieDir);
+        if (!vecMovies.empty()) {
+            m_pcListMovies->clear();
+            for (auto& itMovie : vecMovies)
+                m_pcListMovies->addItem(itMovie);
+            m_pcListMovies->setFixedHeight(vecMovies.size() * 24);
+            m_pcListMovies->show();
         }
     }
 
@@ -157,6 +176,22 @@ namespace amms {
             p.start("explorer.exe", QStringList(m_qstrMovieDir));
             p.waitForFinished();    //等待完成
         }
+    }
+
+    void CMovieInfoWindow::slotMovieItemDoubleClicked(QListWidgetItem* pcItem)
+    {
+        if (pcItem == NULL)
+            return;
+        QString qstrFileName = m_qstrMovieDir + "\\" + pcItem->text();
+
+        QString qstrPlayer = CFG()->PlayerPath().c_str();
+
+        QProcess p(0);
+        if (qstrPlayer == "")
+            p.start("explorer.exe", QStringList(qstrFileName));
+        else
+            p.start(qstrPlayer, QStringList(qstrFileName));
+        p.waitForFinished();    //等待完成
     }
 
     void CMovieInfoWindow::Clear()
@@ -171,7 +206,8 @@ namespace amms {
         m_pcLabel6->hide();
         m_pcLabel7->hide();
         m_pcLabel8->hide();
-        m_pcListActor->hide();
+        m_pcListActors->hide();
+        m_pcListMovies->hide();
         // m_pcGraphLabelPreview->hide();
         // m_pcLabelPreviewCount->hide();
         // m_pcBtnPre->hide();
@@ -180,4 +216,30 @@ namespace amms {
     }
 
 
+    QVector<QString> GetMovieFiles(const QString& qstrPath)
+    {
+        QVector<QString> movies;
+        QDir dir(qstrPath);
+        if (!dir.exists())
+            return movies;
+        auto setMovieFileExt = CFG()->MovieFileExtension();
+
+        // dir.setFilter(QDir::Dirs|QDir::Files);     //除了目录或文件，其他的过滤掉
+        // dir.setSorting(QDir::DirsFirst);           //优先显示目录
+        // /*
+        dir.setFilter(QDir::Files);
+        QFileInfoList list = dir.entryInfoList();      //获取文件信息列表
+        for (auto itFInfo = list.begin(); itFInfo != list.end(); ++itFInfo) {
+            if (itFInfo->fileName()=="." || itFInfo->fileName()=="..")
+                continue;
+            if (itFInfo->isDir())
+                continue;
+            QString ext= itFInfo->suffix();
+            if (setMovieFileExt.count(ext.toStdString()) > 0) {
+                movies.push_back(itFInfo->fileName());
+            }
+        }
+        // */
+        return movies;
+    }
 }

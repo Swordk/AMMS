@@ -138,6 +138,13 @@ namespace amms {
             return nConfig;
         }
 
+        virtual inline std::string PlayerPath() const override {
+            std::string strConfig = userConfig.PlayerPath();
+            if (strConfig == "")
+                strConfig = defaultConfig.PlayerPath();
+            return strConfig;
+        }
+
     protected:
         CFileConfig defaultConfig;
         CFileConfig userConfig;

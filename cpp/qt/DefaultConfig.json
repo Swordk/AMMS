@@ -4,8 +4,8 @@
     },
     "Movie": {
         "movie_path": "",
-        "movie_file_extension": [
-            "mkv","avi","wmv","rmvb","rm","mov","mpeg","mpg","dat"
+        "movie_file_extension":[ 
+            "mp4","mkv","avi","wmv","rmvb","rm","mov","mpeg","mpg","dat"
         ]
     },
     "UI": {
