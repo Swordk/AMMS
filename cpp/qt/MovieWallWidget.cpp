@@ -24,6 +24,7 @@ namespace amms {
         // QIcon ic = QIcon(pix.scaled(212, 300));
         QIcon ic(pix);
         QListWidgetItem* item = new QListWidgetItem(ic, qstrTxt, this);
+        //item->
     }
     void CMovieWallWidget::slotItemDoubleClicked(QListWidgetItem* item)
     {

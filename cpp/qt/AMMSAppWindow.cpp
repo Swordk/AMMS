@@ -18,6 +18,7 @@
 #include "Config.h"
 #include "EventObject.h"
 #include "MDataBase.h"
+#include "PicCache.h"
 
 namespace amms {
 
@@ -60,10 +61,14 @@ namespace amms {
         connect(m_pcActorsList, SIGNAL(signalActorSelected(QString)), m_pcActorInfoWidget, SLOT(slotSetlActor(QString)));
         connect(m_pcMovieWall, SIGNAL(signalItemSelected(QString)), this, SLOT(slotMovieSelected(QString)));
 
+        connect(this, SIGNAL(signalEventToSelf(CEventObject)), this, SLOT(slotEventFromSelf(CEventObject)));
+        RegisterEventProcesser(etRspLoadPic);
+
     }
 
     void CAMMSAppWindow::slotActorSelected(QString qstrActor)
     {
+        m_mapFile2Item.clear();
         std::string strActor = qstrActor.toStdString();
         auto setSn = MDB()->Actors2Sn(strActor);
         if (setSn.empty())
@@ -76,12 +81,20 @@ namespace amms {
             if (qlist.length() != 2)
                 continue;
             QString qstrPic = qstrMovieDir + qlist[0] + "\\" + qstr + "\\" + qstr + ".jpg";
+            string strPic = qstrPic.toStdString();
             // auto itMovie = MDB()->Movies(qstr.toStdString());
             // if (itMovie.count("date"))
             //     qstr += ("     " + *(itMovie.at("date").begin())).c_str();
-            QPixmap pix(qstrPic);
+            QPixmap pix("amms.png");
+            if (PicCacheInst()->HasPixmap(strPic))
+                PicCacheInst()->GetPixmap(strPic, pix);
+            else {
+                // pix.
+                PostEvent(CEventPtr(new CLoadPicReqEvent(strPic)));
+            }
             QIcon ic(pix);
             QListWidgetItem* item = new QListWidgetItem(ic, qstr, m_pcMovieWall);
+            m_mapFile2Item[strPic] = item;
             m_pcMovieWall->addItem(item);
         }
     }
@@ -102,7 +115,28 @@ namespace amms {
 
     void CAMMSAppWindow::_ProcessEvent(CEventPtr& pcEvent)
     {
-        // emit signalEventToSelf(CEventObject(v_pcEvent));
+        emit signalEventToSelf(CEventObject(pcEvent));
     }
 
+    void CAMMSAppWindow::slotEventFromSelf(CEventObject objEvent)
+    {
+        CEventPtr pcEvent = objEvent.GetEvent();
+        switch (pcEvent->Type()) {
+        case etRspLoadPic: {
+            CLoadPicRspEvent* pcRspEvent = (CLoadPicRspEvent*)(pcEvent.get());
+            if (pcRspEvent && pcRspEvent->m_bSuccess) {
+                string strFileName = pcRspEvent->m_strFileName;
+                if (m_mapFile2Item.count(strFileName)) {
+                    QPixmap pix;
+                    PicCacheInst()->GetPixmap(strFileName, pix);
+                    m_mapFile2Item[strFileName]->setIcon(QIcon(pix));
+                    m_mapFile2Item[strFileName]->setHidden(true);
+                    m_mapFile2Item[strFileName]->setHidden(false);
+
+                }
+            }
+            break;
+        }
+        }
+    }
 }

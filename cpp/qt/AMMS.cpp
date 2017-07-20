@@ -14,6 +14,7 @@
 #include "Config.h"
 #include "MDataBase.h"
 #include "EventObject.h"
+#include "PicLoader.h"
 
 namespace amms {
     namespace bgg = boost::gregorian;
@@ -41,6 +42,9 @@ int CAMMS::Run(int argc, char *argv[])
     // 加载数据
     CFG()->Init();
     MDB()->Init();
+
+    CPicLoader* pcPicLoader = new CPicLoader(this);
+    pcPicLoader->Init();
 
     while(t.elapsed()<2000)
     {

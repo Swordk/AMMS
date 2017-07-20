@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <string>
 #include <boost/shared_ptr.hpp>
 // #include <boost/serialization/nvp.hpp>
 // #include <boost/serialization/access.hpp>
@@ -18,10 +19,14 @@
 namespace amms {
 
     class CEvent;
+    class CLoadPicReqEvent;
+    class CLoadPicRspEvent;
 
     // -------------------------------------------------------------------
     enum EU_EventType {
-        etStopEventProcesser = 0
+        etStopEventProcesser = 0,
+        etReqLoadPic,
+        etRspLoadPic
     };
 
     //////////////////////////////////////////////////////////////////////////
@@ -51,6 +56,38 @@ namespace amms {
         EU_EventType m_euType;
         int m_iSessionId;
     };
+
+
+
+    //////////////////////////////////////////////////////////////////////////
+    class CLoadPicReqEvent : public CEvent {
+    public:
+        explicit CLoadPicReqEvent(std::string strFileName)
+            : CEvent(etReqLoadPic)
+            , m_strFileName(strFileName)
+        {}
+
+        virtual ~CLoadPicReqEvent(){}
+
+    public:
+        std::string m_strFileName;
+    };
+
+
+    class CLoadPicRspEvent : public CLoadPicReqEvent {
+    public:
+        explicit CLoadPicRspEvent(std::string strFileName)
+            : CLoadPicReqEvent(strFileName)
+            , m_bSuccess(false)
+        {
+            m_euType = etRspLoadPic;
+        }
+
+    public:
+        bool m_bSuccess;
+
+    };
+
 
     // BOOST_SERIALIZATION_ASSUME_ABSTRACT(CEvent)
     typedef boost::shared_ptr<CEvent> CEventPtr;
