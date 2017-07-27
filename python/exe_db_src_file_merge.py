@@ -23,7 +23,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         movie_path = sys.argv[1] + '/'
     
-    movie_path = 'X:\\SublimeText3\\Data\\d\\2\\00.done\\0'
+    # movie_path = 'X:\\SublimeText3\\Data\\d\\2\\00.done\\0'
     print(movie_path)
 
     dict_movies_info_all = {}
@@ -43,6 +43,21 @@ if __name__ == '__main__':
             with codecs.open(folder + '/pics.json', 'r', 'utf-8') as f:
                 pics = json.load(f)
                 dict_movies_pics_all.update(pics)
+    
+    # dict_dump = [(k,dict_movies_info_all[k]) for k in sorted(dict_movies_info_all.keys())] 
+    # movies_json = json.dumps(dict_dump, ensure_ascii=False, indent=2)
+    # with codecs.open('merged_movies.json', 'w', 'utf-8') as f:
+    #     f.write(movies_json)
+    
+    # dict_dump = [(k,dict_actors_info_all[k]) for k in sorted(dict_actors_info_all.keys())] 
+    # actors_json = json.dumps(dict_dump, ensure_ascii=False, indent=2)
+    # with codecs.open('merged_actors.json', 'w', 'utf-8') as f:
+    #     f.write(actors_json)
+
+    # dict_dump = [(k,dict_movies_pics_all[k]) for k in sorted(dict_movies_pics_all.keys())] 
+    # pics_json = json.dumps(dict_dump, ensure_ascii=False, indent=2)
+    # with codecs.open('merged_pics.json', 'w', 'utf-8') as f:
+    #     f.write(pics_json)
 
     movies_json = json.dumps(dict_movies_info_all, ensure_ascii=False, indent=2)
     with codecs.open('movies.json', 'w', 'utf-8') as f:
