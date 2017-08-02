@@ -20,6 +20,7 @@
 #include "EventProcesser.h"
 #include "EventObject.h"
 #include "ActorsListWidget.h"
+#include "CommonContentListWidget.h"
 #include "ActorInfoWidget.h"
 #include "MovieWallWidget.h"
 #include "MovieInfoWindow.h"
@@ -42,6 +43,9 @@ namespace amms {
 
     public slots:
         void slotActorSelected(QString);
+        void slotSeriesSelected(QString);
+        void slotGenresSelected(QString);
+        void slotSnSelected(QString);
         void slotMovieSelected(QString);
 
     signals:
@@ -56,12 +60,19 @@ namespace amms {
         void slotEventFromSelf(CEventObject);
 
     private:
+        void Movies2MovieWall(const std::set<std::string>& setMovies);
+
+
+    private:
         map<string, QListWidgetItem*> m_mapFile2Item;
 
-        CActorsListWidget*  m_pcActorsList;
-        CActorInfoWidget*   m_pcActorInfoWidget;
-        CMovieWallWidget*   m_pcMovieWall;
-        CMovieInfoWindow*   m_pcMovieInfoWindow;
+        CActorsListWidget*          m_pcActorsList;         // 演员列表
+        CCommonContentListWidget*   m_pcSeriesList;         // 系列列表
+        CCommonContentListWidget*   m_pcGenresList;         // 类别列表
+        CCommonContentListWidget*   m_pcSnList;             // 番号列表
+        CActorInfoWidget*           m_pcActorInfoWidget;
+        CMovieWallWidget*           m_pcMovieWall;
+        CMovieInfoWindow*           m_pcMovieInfoWindow;
     };
 }
 

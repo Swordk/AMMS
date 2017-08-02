@@ -13,6 +13,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QListWidgetItem>
+#include <QTableWidget>
 
 #include "AMMSAppWindow.h"
 #include "Config.h"
@@ -24,12 +25,43 @@ namespace amms {
 
     void CAMMSAppWindow::Init()
     {
+        // UI
         QSplitter* pcMainSplitter = new QSplitter(Qt::Horizontal, this);
         pcMainSplitter->setHandleWidth(1);
         pcMainSplitter->setStyleSheet("QSplitter::handle { background-color: lightgray }"); //设置分界线的样式
-        m_pcActorsList = new CActorsListWidget(pcMainSplitter);
+
+        QTabWidget* pcTabWidget = new QTabWidget(pcMainSplitter);
+
+        int nTabWidgetWidth = 0;
+        m_pcActorsList = new CActorsListWidget(this);
         m_pcActorsList->Init();
-        m_pcActorsList->setMaximumWidth(m_pcActorsList->GetTotalWidth() + 30);
+        int nWidth = m_pcActorsList->GetTotalWidth() + 30;
+        nTabWidgetWidth = std::max(nTabWidgetWidth, nWidth);
+        // m_pcActorsList->setMaximumWidth(nWidth);
+        pcTabWidget->addTab(m_pcActorsList, QStringLiteral("演员"));
+
+        m_pcSeriesList = new CCommonContentListWidget(this);
+        m_pcSeriesList->Init(QStringLiteral("系列").toStdString());
+        nWidth = m_pcSeriesList->GetTotalWidth() + 30;
+        nTabWidgetWidth = std::max(nTabWidgetWidth, nWidth);
+        // m_pcSeriesList->setMaximumWidth(nWidth);
+        pcTabWidget->addTab(m_pcSeriesList, QStringLiteral("系列"));
+
+        m_pcGenresList = new CCommonContentListWidget(this);
+        m_pcGenresList->Init(QStringLiteral("类别").toStdString());
+        nWidth = m_pcGenresList->GetTotalWidth() + 30;
+        nTabWidgetWidth = std::max(nTabWidgetWidth, nWidth);
+        // m_pcGenresList->setMaximumWidth(nWidth);
+        pcTabWidget->addTab(m_pcGenresList, QStringLiteral("类别"));
+
+        m_pcSnList = new CCommonContentListWidget(this);
+        m_pcSnList->Init(QStringLiteral("番号").toStdString());
+        nWidth = m_pcSnList->GetTotalWidth() + 30;
+        nTabWidgetWidth = std::max(nTabWidgetWidth, nWidth);
+        // m_pcSnList->setMaximumWidth(nWidth);
+        pcTabWidget->addTab(m_pcSnList, QStringLiteral("番号"));
+
+        pcTabWidget->setMaximumWidth(nTabWidgetWidth);
 
         QWidget* pcWidget = new QWidget(pcMainSplitter);
         pcWidget->setStyleSheet("QWidget { border: 0px } ");
@@ -51,14 +83,35 @@ namespace amms {
         this->setCentralWidget(pcMainSplitter);
         this->showMaximized();
 
+
+        // Datas
         auto mapActors2Sn = MDB()->Actors2Sn();
         m_pcActorsList->SetActors(mapActors2Sn);
+
+        auto mapSereis2Sn = MDB()->Series2Sn();
+        std::map<std::string, int> mapSereis2Count;
+        for (auto& item : mapSereis2Sn)
+            mapSereis2Count[item.first] = item.second.size();
+        m_pcSeriesList->SetContents(mapSereis2Count);
+
+        auto mapGenres2Sn = MDB()->Genres2Sn();
+        std::map<std::string, int> mapGenres2Count;
+        for (auto& item : mapGenres2Sn)
+            mapGenres2Count[item.first] = item.second.size();
+        m_pcGenresList->SetContents(mapGenres2Count);
+
 
         m_pcMovieInfoWindow = new CMovieInfoWindow(this);
         m_pcMovieInfoWindow->Init();
         m_pcMovieInfoWindow->hide();
         connect(m_pcActorsList, SIGNAL(signalActorSelected(QString)), this, SLOT(slotActorSelected(QString)));
         connect(m_pcActorsList, SIGNAL(signalActorSelected(QString)), m_pcActorInfoWidget, SLOT(slotSetlActor(QString)));
+
+        connect(m_pcSeriesList, SIGNAL(signalContentSelected(QString)), this, SLOT(slotSeriesSelected(QString)));
+        connect(m_pcGenresList, SIGNAL(signalContentSelected(QString)), this, SLOT(slotGenresSelected(QString)));
+        connect(m_pcSnList, SIGNAL(signalContentSelected(QString)), this, SLOT(slotSnSelected(QString)));
+
+
         connect(m_pcMovieWall, SIGNAL(signalItemSelected(QString)), this, SLOT(slotMovieSelected(QString)));
 
         connect(this, SIGNAL(signalEventToSelf(CEventObject)), this, SLOT(slotEventFromSelf(CEventObject)));
@@ -70,34 +123,29 @@ namespace amms {
     {
         m_mapFile2Item.clear();
         std::string strActor = qstrActor.toStdString();
-        auto setSn = MDB()->Actors2Sn(strActor);
-        if (setSn.empty())
-            return;
-        m_pcMovieWall->clear();
-        QString qstrMovieDir = (CFG()->MoviePath() + "\\").c_str();
-        for (auto item : setSn) {
-            QString qstr = item.c_str();
-            QStringList qlist = qstr.split('-');
-            if (qlist.length() != 2)
-                continue;
-            QString qstrPic = qstrMovieDir + qlist[0] + "\\" + qstr + "\\" + qstr + ".jpg";
-            string strPic = qstrPic.toStdString();
-            // auto itMovie = MDB()->Movies(qstr.toStdString());
-            // if (itMovie.count("date"))
-            //     qstr += ("     " + *(itMovie.at("date").begin())).c_str();
-            QPixmap pix("amms.png");
-            if (PicCacheInst()->HasPixmap(strPic))
-                PicCacheInst()->GetPixmap(strPic, pix);
-            else {
-                // pix.
-                PostEvent(CEventPtr(new CLoadPicReqEvent(strPic)));
-            }
-            QIcon ic(pix);
-            QListWidgetItem* item = new QListWidgetItem(ic, qstr, m_pcMovieWall);
-            m_mapFile2Item[strPic] = item;
-            m_pcMovieWall->addItem(item);
-        }
+        auto setMovies = MDB()->Actors2Sn(strActor);
+        Movies2MovieWall(setMovies);
     }
+
+    void CAMMSAppWindow::slotSeriesSelected(QString qstrSeries)
+    {
+        m_mapFile2Item.clear();
+        auto& setMovies = MDB()->Series2Sn(qstrSeries.toStdString());
+        Movies2MovieWall(setMovies);
+    }
+
+    void CAMMSAppWindow::slotGenresSelected(QString qstrGenres)
+    {
+        m_mapFile2Item.clear();
+        auto& setMovies = MDB()->Genres2Sn(qstrGenres.toStdString());
+        Movies2MovieWall(setMovies);
+    }
+
+    void CAMMSAppWindow::slotSnSelected(QString qstrSn)
+    {
+
+    }
+
 
     void CAMMSAppWindow::slotMovieSelected(QString qstrSn)
     {
@@ -137,6 +185,37 @@ namespace amms {
             }
             break;
         }
+        }
+    }
+
+
+    void CAMMSAppWindow::Movies2MovieWall(const std::set<std::string>& setMovies)
+    {
+        if (setMovies.empty())
+            return;
+        m_pcMovieWall->clear();
+        QString qstrMovieDir = (CFG()->MoviePath() + "\\").c_str();
+        for (auto item : setMovies) {
+            QString qstr = item.c_str();
+            QStringList qlist = qstr.split('-');
+            if (qlist.length() != 2)
+                continue;
+            QString qstrPic = qstrMovieDir + qlist[0] + "\\" + qstr + "\\" + qstr + ".jpg";
+            string strPic = qstrPic.toStdString();
+            // auto itMovie = MDB()->Movies(qstr.toStdString());
+            // if (itMovie.count("date"))
+            //     qstr += ("     " + *(itMovie.at("date").begin())).c_str();
+            QPixmap pix("amms.png");
+            if (PicCacheInst()->HasPixmap(strPic))
+                PicCacheInst()->GetPixmap(strPic, pix);
+            else {
+                // pix.
+                PostEvent(CEventPtr(new CLoadPicReqEvent(strPic)));
+            }
+            QIcon ic(pix);
+            QListWidgetItem* item = new QListWidgetItem(ic, qstr, m_pcMovieWall);
+            m_mapFile2Item[strPic] = item;
+            m_pcMovieWall->addItem(item);
         }
     }
 }

@@ -19,6 +19,7 @@ SOURCES += \
     EventObject.cpp \
     TableWidget.cpp \
     ActorsListWidget.cpp \
+    CommonContentListWidget.cpp \
     ActorInfoWidget.cpp \
     MovieWallWidget.cpp \
     MovieInfoWindow.cpp \
@@ -37,6 +38,7 @@ HEADERS  += \
     EventObject.h \
     TableWidget.h \
     ActorsListWidget.h \
+    CommonContentListWidget.h \
     ActorInfoWidget.h \
     MovieWallWidget.h \
     MovieInfoWindow.h \
