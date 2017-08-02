@@ -9,6 +9,15 @@ import time
 from lxml import html
 import string_handler as str_handler
 
+series_black_list = [
+    '薄马赛克',
+    '单体作品', 'DMM独家', 'DVDトースター',
+    '高画质', 
+    '企画', 
+    '数位马赛克'
+]
+
+
 # ##################################################################################################
 def page_search_handler(input_movie_sn, web_url = 'avio.pw'):
     '''
@@ -110,7 +119,10 @@ def page_detail_handler(movie_sn, url):
                 if len(genres_all) > 0:
                     rtn_detail[u'genres'] = []
                     for genre in genres_all:
-                        rtn_detail[u'genres'].append(str(genre))
+                        # rtn_detail[u'genres'].append(str(genre))
+                        str_genre = str(genre)
+                        if str_genre not in series_black_list:
+                            rtn_detail[u'genres'].append(str(genre))
             else:
                 child_text = detail_info.xpath(u'span/text()')
                 if len(child_text) == 2:
