@@ -16,11 +16,12 @@ namespace amms {
         this->setStyleSheet(QString("font-size: 14px; border: 0px;"));
         this->setEditTriggers(QTableWidget::NoEditTriggers);        //设置不可编辑
 
-        this->AddColumn("ActorName", "ActorName", 120);
-        this->AddColumn("Grand", "Grand", 50);
-        this->AddColumn("BirthDay", "BirthDay", 90);
+        this->AddColumn("ActorName", QStringLiteral("演员").toStdString(), 120);
+        this->AddColumn("Grand", QStringLiteral("评分").toStdString(), 50);
+        this->AddColumn("Count", QStringLiteral("数量").toStdString(), 50);
+        this->AddColumn("BirthDay", QStringLiteral("生日").toStdString(), 90);
         this->AddColumn("Cup", "Cup", 40);
-        this->AddColumn("Height", "Height", 60);
+        this->AddColumn("Height", QStringLiteral("身高").toStdString(), 60);
         this->verticalHeader()->setHidden(true);                    // 隐藏行号
         this->InitColumns(true);
         this->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -39,6 +40,7 @@ namespace amms {
         for (auto& item : mapActors2Sn) {
             std::string strActorName = item.first;
             auto actorInfo = MDB()->ActorInfo(strActorName);
+            auto actorMovieCount = MDB()->ActorMovieCount(strActorName);
 
             this->AddRow();
             auto pcItem = this->item(nRowIndex, 0);
@@ -46,11 +48,14 @@ namespace amms {
                 pcItem->setText(strActorName.c_str());
             pcItem = this->item(nRowIndex, 2);
             if (pcItem)
-                pcItem->setText(actorInfo.strBirthDay.c_str());
+                pcItem->setData(Qt::DisplayRole, actorMovieCount);
             pcItem = this->item(nRowIndex, 3);
             if (pcItem)
-                pcItem->setText(actorInfo.strCup.c_str());
+                pcItem->setText(actorInfo.strBirthDay.c_str());
             pcItem = this->item(nRowIndex, 4);
+            if (pcItem)
+                pcItem->setText(actorInfo.strCup.c_str());
+            pcItem = this->item(nRowIndex, 5);
             if (pcItem)
                 pcItem->setText(actorInfo.strHeight.c_str());
             ++nRowIndex;

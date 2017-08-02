@@ -51,6 +51,10 @@ namespace amms {
         }
 
 
+        inline size_t ActorMovieCount(const std::string& strActorName) {
+            return mapActors2Sn[strActorName].size();
+        }
+
         inline std::map<std::string, std::set<std::string> > Actors2Sn() const {
             return mapActors2Sn;
         }

@@ -49,7 +49,7 @@ HEADERS  += \
 win32 {
     BOOST_VERSION = 1_61
     IS_DEBUG=-gd
-    BOOST_DIR = D:/boost/boost_$${BOOST_VERSION}_0
+    BOOST_DIR = C:/boost/boost_$${BOOST_VERSION}_0
     BOOST_LIB_DIR = $${BOOST_DIR}/stage/lib
     LIBS += -l$${BOOST_LIB_DIR}/libboost_atomic-vc120-mt$${IS_DEBUG}-$${BOOST_VERSION} \
             -l$${BOOST_LIB_DIR}/libboost_locale-vc120-mt$${IS_DEBUG}-$${BOOST_VERSION} \
