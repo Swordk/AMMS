@@ -76,9 +76,9 @@ namespace amms {
 
     class CLoadPicRspEvent : public CLoadPicReqEvent {
     public:
-        explicit CLoadPicRspEvent(std::string strFileName)
+        explicit CLoadPicRspEvent(std::string strFileName, bool bSuccess)
             : CLoadPicReqEvent(strFileName)
-            , m_bSuccess(false)
+            , m_bSuccess(bSuccess)
         {
             m_euType = etRspLoadPic;
         }

@@ -111,34 +111,39 @@ namespace amms {
         connect(m_pcGenresList, SIGNAL(signalContentSelected(QString)), this, SLOT(slotGenresSelected(QString)));
         connect(m_pcSnList, SIGNAL(signalContentSelected(QString)), this, SLOT(slotSnSelected(QString)));
 
-
         connect(m_pcMovieWall, SIGNAL(signalItemSelected(QString)), this, SLOT(slotMovieSelected(QString)));
 
         connect(this, SIGNAL(signalEventToSelf(CEventObject)), this, SLOT(slotEventFromSelf(CEventObject)));
+        connect(m_pcMovieWall, SIGNAL(signalEventToParent(CEventObject)), this, SLOT(slotEventFromChild(CEventObject)));
+        connect(this, SIGNAL(signalEventToChild(CEventObject)), m_pcMovieWall, SLOT(slotEventFromParent(CEventObject)));
+
         RegisterEventProcesser(etRspLoadPic);
 
     }
 
     void CAMMSAppWindow::slotActorSelected(QString qstrActor)
     {
-        m_mapFile2Item.clear();
+        // m_mapFile2Item.clear();
         std::string strActor = qstrActor.toStdString();
         auto setMovies = MDB()->Actors2Sn(strActor);
-        Movies2MovieWall(setMovies);
+        m_pcMovieWall->SetMovies(setMovies);
+        // Movies2MovieWall(setMovies);
     }
 
     void CAMMSAppWindow::slotSeriesSelected(QString qstrSeries)
     {
-        m_mapFile2Item.clear();
+        // m_mapFile2Item.clear();
         auto& setMovies = MDB()->Series2Sn(qstrSeries.toStdString());
-        Movies2MovieWall(setMovies);
+        m_pcMovieWall->SetMovies(setMovies);
+        // Movies2MovieWall(setMovies);
     }
 
     void CAMMSAppWindow::slotGenresSelected(QString qstrGenres)
     {
-        m_mapFile2Item.clear();
+        // m_mapFile2Item.clear();
         auto& setMovies = MDB()->Genres2Sn(qstrGenres.toStdString());
-        Movies2MovieWall(setMovies);
+        m_pcMovieWall->SetMovies(setMovies);
+        // Movies2MovieWall(setMovies);
     }
 
     void CAMMSAppWindow::slotSnSelected(QString qstrSn)
@@ -170,52 +175,58 @@ namespace amms {
     {
         CEventPtr pcEvent = objEvent.GetEvent();
         switch (pcEvent->Type()) {
-        case etRspLoadPic: {
+        case etRspLoadPic: {            
             CLoadPicRspEvent* pcRspEvent = (CLoadPicRspEvent*)(pcEvent.get());
             if (pcRspEvent && pcRspEvent->m_bSuccess) {
-                string strFileName = pcRspEvent->m_strFileName;
-                if (m_mapFile2Item.count(strFileName)) {
-                    QPixmap pix;
-                    PicCacheInst()->GetPixmap(strFileName, pix);
-                    m_mapFile2Item[strFileName]->setIcon(QIcon(pix));
-                    m_mapFile2Item[strFileName]->setHidden(true);
-                    m_mapFile2Item[strFileName]->setHidden(false);
-
-                }
+                std::string strFileName = pcRspEvent->m_strFileName;
+                emit signalEventToChild(CEventObject(CEventPtr(new CLoadPicRspEvent(strFileName, true))));
             }
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    void CAMMSAppWindow::slotEventFromChild(CEventObject objEvent)
+    {
+        CEventPtr pcEvent = objEvent.GetEvent();
+        switch (pcEvent->Type()) {
+        case etReqLoadPic: {
+            CLoadPicReqEvent* pcReqEvent = (CLoadPicReqEvent*)(pcEvent.get());
+            PostEvent(CEventPtr(new CLoadPicReqEvent(pcReqEvent->m_strFileName)));
             break;
         }
         }
     }
 
-
-    void CAMMSAppWindow::Movies2MovieWall(const std::set<std::string>& setMovies)
-    {
-        if (setMovies.empty())
-            return;
-        m_pcMovieWall->clear();
-        QString qstrMovieDir = (CFG()->MoviePath() + "\\").c_str();
-        for (auto item : setMovies) {
-            QString qstr = item.c_str();
-            QStringList qlist = qstr.split('-');
-            if (qlist.length() != 2)
-                continue;
-            QString qstrPic = qstrMovieDir + qlist[0] + "\\" + qstr + "\\" + qstr + ".jpg";
-            string strPic = qstrPic.toStdString();
-            // auto itMovie = MDB()->Movies(qstr.toStdString());
-            // if (itMovie.count("date"))
-            //     qstr += ("     " + *(itMovie.at("date").begin())).c_str();
-            QPixmap pix("amms.png");
-            if (PicCacheInst()->HasPixmap(strPic))
-                PicCacheInst()->GetPixmap(strPic, pix);
-            else {
-                // pix.
-                PostEvent(CEventPtr(new CLoadPicReqEvent(strPic)));
-            }
-            QIcon ic(pix);
-            QListWidgetItem* item = new QListWidgetItem(ic, qstr, m_pcMovieWall);
-            m_mapFile2Item[strPic] = item;
-            m_pcMovieWall->addItem(item);
-        }
-    }
+    // void CAMMSAppWindow::Movies2MovieWall(const std::set<std::string>& setMovies)
+    // {
+    //     if (setMovies.empty())
+    //         return;
+    //     m_pcMovieWall->clear();
+    //     QString qstrMovieDir = (CFG()->MoviePath() + "\\").c_str();
+    //     for (auto item : setMovies) {
+    //         QString qstr = item.c_str();
+    //         QStringList qlist = qstr.split('-');
+    //         if (qlist.length() != 2)
+    //             continue;
+    //         QString qstrPic = qstrMovieDir + qlist[0] + "\\" + qstr + "\\" + qstr + ".jpg";
+    //         string strPic = qstrPic.toStdString();
+    //         // auto itMovie = MDB()->Movies(qstr.toStdString());
+    //         // if (itMovie.count("date"))
+    //         //     qstr += ("     " + *(itMovie.at("date").begin())).c_str();
+    //         QPixmap pix("amms.png");
+    //         if (PicCacheInst()->HasPixmap(strPic))
+    //             PicCacheInst()->GetPixmap(strPic, pix);
+    //         else {
+    //             // pix.
+    //             PostEvent(CEventPtr(new CLoadPicReqEvent(strPic)));
+    //         }
+    //         QIcon ic(pix);
+    //         QListWidgetItem* item = new QListWidgetItem(ic, qstr, m_pcMovieWall);
+    //         m_mapFile2Item[strPic] = item;
+    //         m_pcMovieWall->addItem(item);
+    //     }
+    // }
 }

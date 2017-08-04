@@ -13,7 +13,7 @@ namespace amms {
         return &s_instance;
     }
 
-    bool CPicCache::LoadPixmap(const string& strFileName)
+    bool CPicCache::LoadPixmap(const std::string& strFileName)
     {
         readLock rl(m_mtxPixmap);
         if (m_mapPixmap.count(strFileName))
@@ -28,7 +28,7 @@ namespace amms {
         return true;
     }
 
-    bool CPicCache::GetPixmap(const string &strFileName, QPixmap &o_pix)
+    bool CPicCache::GetPixmap(const std::string &strFileName, QPixmap &o_pix)
     {
         readLock rl(m_mtxPixmap);
         if (m_mapPixmap.count(strFileName) <= 0)

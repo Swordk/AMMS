@@ -26,8 +26,6 @@
 #include "MovieInfoWindow.h"
 
 namespace amms {
-    using namespace std;
-
     class CAMMSAppWindow : public QMainWindow, public CEventProcesser {
         Q_OBJECT
     public:
@@ -50,6 +48,7 @@ namespace amms {
 
     signals:
         void signalEventToSelf(CEventObject);
+        void signalEventToChild(CEventObject);
 
     ///子类重载方法
     protected:
@@ -58,13 +57,14 @@ namespace amms {
 
     private slots:
         void slotEventFromSelf(CEventObject);
+        void slotEventFromChild(CEventObject);
 
     private:
         void Movies2MovieWall(const std::set<std::string>& setMovies);
 
 
     private:
-        map<string, QListWidgetItem*> m_mapFile2Item;
+        // map<string, QListWidgetItem*> m_mapFile2Item;
 
         CActorsListWidget*          m_pcActorsList;         // 演员列表
         CCommonContentListWidget*   m_pcSeriesList;         // 系列列表

@@ -21,11 +21,7 @@ namespace amms {
                 std::string strFile = pcReqEvent->m_strFileName;
 
                 bool bRtn = PicCacheInst()->LoadPixmap(strFile);
-                CLoadPicRspEvent* pcRspEvent = new CLoadPicRspEvent(strFile);
-                if (bRtn)
-                    pcRspEvent->m_bSuccess = true;
-                else
-                    pcRspEvent->m_bSuccess = false;
+                CLoadPicRspEvent* pcRspEvent = new CLoadPicRspEvent(strFile, bRtn);
                 PostEvent(CEventPtr(pcRspEvent));
             }
             break;

@@ -15,18 +15,16 @@
 
 
 namespace amms {
-    using namespace std;
-
     class CPicCache {
     public:
         static CPicCache* GetInstance();
         virtual ~CPicCache(){}
 
     public:
-        bool LoadPixmap(const string& strFileName);
+        bool LoadPixmap(const std::string& strFileName);
 
-        bool GetPixmap(const string& strFileName, QPixmap& o_pix);
-        inline bool HasPixmap(const string& strFileName) {
+        bool GetPixmap(const std::string& strFileName, QPixmap& o_pix);
+        inline bool HasPixmap(const std::string& strFileName) {
             readLock rl(m_mtxPixmap);
             return m_mapPixmap.count(strFileName) > 0;
         }
@@ -34,7 +32,7 @@ namespace amms {
     private:
         CPicCache(){}
 
-        map<string, QPixmap>    m_mapPixmap;
+        std::map<std::string, QPixmap>    m_mapPixmap;
         boost::shared_mutex     m_mtxPixmap;
 
     };

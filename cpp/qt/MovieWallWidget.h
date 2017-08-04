@@ -5,11 +5,14 @@
 /////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
+#include <string>
+#include <set>
+#include <map>
 #include <QString>
 #include <QSize>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include "EventObject.h"
 
 namespace amms {
 
@@ -19,7 +22,7 @@ namespace amms {
         //构造函数
         explicit CMovieWallWidget(QWidget * parent = 0)
             : QListWidget(parent)
-
+            , m_mapFile2Item()
         {}
         //析构函数
         virtual ~CMovieWallWidget() {}
@@ -27,13 +30,21 @@ namespace amms {
         //
         void Init(QSize frameSize);
 
-        void AddItem(const QString& qstrTxt, const QString& qstrPic);
+        void SetMovies(const std::set<std::string>& setMovies);
+        void SetIcon(const std::string& strIconFile);
 
     signals:
         void signalItemSelected(QString qstrSn);
+        void signalEventToParent(CEventObject);
+
 
     public slots:
         void slotItemDoubleClicked(QListWidgetItem *item);
+
+        void slotEventFromParent(CEventObject);
+
+    private:
+        std::map<std::string, QListWidgetItem*> m_mapFile2Item;
     };
 }
 

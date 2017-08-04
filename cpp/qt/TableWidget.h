@@ -11,19 +11,17 @@
 #include <QTableWidget>
 
 namespace amms {
-    using namespace std;
-
     struct ColumnDesc_ST {
         int iIndex;
-        string strId;
-        string strDesc;
+        std::string strId;
+        std::string strDesc;
         int iWidth;
         bool bSort;
         bool bHidden;
 
     public:
         ColumnDesc_ST() {}
-        ColumnDesc_ST(int v_iIndex, string v_strId, string v_strDesc, int v_iWidth, bool v_bSort, bool v_bHidden) {
+        ColumnDesc_ST(int v_iIndex, std::string v_strId, std::string v_strDesc, int v_iWidth, bool v_bSort, bool v_bHidden) {
             iIndex = v_iIndex;
             strId = v_strId;
             strDesc = v_strDesc;
@@ -47,24 +45,24 @@ namespace amms {
         int InsertRow(int nRow);
 
         //
-        void AddColumn(string v_strId, string v_strDesc, int v_iWidth, bool v_bSort, bool v_bHidden) {
+        void AddColumn(std::string v_strId, std::string v_strDesc, int v_iWidth, bool v_bSort, bool v_bHidden) {
             m_vecColumnDescs.push_back(ColumnDesc_ST(m_iColumnIndex, v_strId, v_strDesc, v_iWidth, v_bSort, v_bHidden));
             m_mapColumnDescs[v_strId] = ColumnDesc_ST(m_iColumnIndex, v_strId, v_strDesc, v_iWidth, v_bSort, v_bHidden);
             m_iColumnIndex++;
         }
 
         //
-        void AddColumn(string v_strId, string v_strDesc, int v_iWidth) {
+        void AddColumn(std::string v_strId, std::string v_strDesc, int v_iWidth) {
             this->AddColumn(v_strId, v_strDesc, v_iWidth, false, false);
         }
 
         //
-        void AddHiddenColumn(string v_strId, string v_strDesc, int v_iWidth) {
+        void AddHiddenColumn(std::string v_strId, std::string v_strDesc, int v_iWidth) {
             this->AddColumn(v_strId, v_strDesc, v_iWidth, false, true);
         }
 
         //
-        inline int GetColumnIndex(string v_strId) {
+        inline int GetColumnIndex(std::string v_strId) {
             return m_mapColumnDescs[v_strId].iIndex;
         }
 
@@ -81,10 +79,10 @@ namespace amms {
         void InitColumns(bool bSortable = true);
 
         //
-        void SetText(int v_iRowId, string v_strColumn, string v_strContent);
+        void SetText(int v_iRowId, std::string v_strColumn, std::string v_strContent);
 
         //
-        void SetText(int v_iRowId, string v_strColumn, string v_strContent, const QColor& v_pcColor);
+        void SetText(int v_iRowId, std::string v_strColumn, std::string v_strContent, const QColor& v_pcColor);
 
         //
         const QColor GetColor(double v_fValue) {
@@ -107,8 +105,8 @@ namespace amms {
         void slotSort(int v_iColumnIndex);
 
     protected:
-        vector<ColumnDesc_ST> m_vecColumnDescs;
-        map<string, ColumnDesc_ST> m_mapColumnDescs;     //key为strId
+        std::vector<ColumnDesc_ST> m_vecColumnDescs;
+        std::map<std::string, ColumnDesc_ST> m_mapColumnDescs;     //key为strId
         int m_iColumnIndex;
     };
 }
