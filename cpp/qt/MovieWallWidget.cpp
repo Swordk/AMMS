@@ -7,6 +7,7 @@
 #include "MovieWallWidget.h"
 #include <QStringList>
 #include "Config.h"
+#include "MDataBase.h"
 #include "PicCache.h"
 
 namespace amms {
@@ -17,6 +18,12 @@ namespace amms {
         this->setResizeMode(QListView::ResizeMode::Adjust);
         this->setMovement(QListView::Movement::Static);
         this->setSpacing(5);
+
+        // 自动换行
+        this->setFlow(QListView::LeftToRight);
+        this->setProperty("isWrapping", QVariant(true));
+        this->setWordWrap(true);
+
         connect(this, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotItemDoubleClicked(QListWidgetItem*)));
     }
 
@@ -27,18 +34,31 @@ namespace amms {
             return;
         this->clear();
         m_mapFile2Item.clear();
+        m_mapSn2Item.clear();
+        m_mapDate2Item.clear();
 
         QString qstrMovieDir = (CFG()->MoviePath() + "\\").c_str();
         for (auto item : setMovies) {
             QString qstr = item.c_str();
+            std::string strDate = "";
             QStringList qlist = qstr.split('-');
             if (qlist.length() != 2)
                 continue;
             QString qstrPic = qstrMovieDir + qlist[0] + "\\" + qstr + "\\" + qstr + ".jpg";
             std::string strPic = qstrPic.toStdString();
-            // auto itMovie = MDB()->Movies(qstr.toStdString());
-            // if (itMovie.count("date"))
-            //     qstr += ("     " + *(itMovie.at("date").begin())).c_str();
+            auto itMovie = MDB()->MovieInfo(item);
+            if (itMovie.strDate != "") {
+                strDate = itMovie.strDate;
+                if (strDate.length() <= 11 && strDate.length() >= 10) {
+                    if (strDate[0] == ' ')
+                        strDate = strDate.substr(1, strDate.length()-1);
+                    qstr += " \n" + QString(strDate.c_str());
+                }
+            }
+            if (itMovie.strTitle != "") {
+                qstr += " \n" + QString(itMovie.strTitle.c_str());
+            }
+
             QPixmap pix("amms.png");
             if (PicCacheInst()->HasPixmap(strPic))
                 PicCacheInst()->GetPixmap(strPic, pix);
@@ -48,9 +68,11 @@ namespace amms {
                 emit signalEventToParent(CEventObject(CEventPtr(new CLoadPicReqEvent(strPic))));
             }
             QIcon ic(pix);
-            QListWidgetItem* item = new QListWidgetItem(ic, qstr, this);
-            m_mapFile2Item[strPic] = item;
-            this->addItem(item);
+            QListWidgetItem* pcItem = new QListWidgetItem(ic, qstr, this);
+            m_mapFile2Item[strPic] = pcItem;
+            m_mapSn2Item[item] = pcItem;
+            m_mapDate2Item[strDate][item] = pcItem;
+            this->addItem(pcItem);
         }
     }
 

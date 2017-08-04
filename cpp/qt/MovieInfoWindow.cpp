@@ -111,6 +111,7 @@ namespace amms {
         m_qstrMovieDir = CFG()->MoviePath().c_str() + QString("\\") + snSplit[0] + "\\" + qstrSn;
         QString qstrActorPath = CFG()->DbPath().c_str() + QString("\\actor_pic");
         QPixmap pix(m_qstrMovieDir + "\\" + qstrSn + ".jpg");
+        pix = pix.scaledToWidth(std::min(1000, pix.width()));
         m_pcGraphLabelCover->setPixmap(pix);
         m_pcGraphLabelCover->show();
 
@@ -151,7 +152,13 @@ namespace amms {
         if (movieInfo.setActors.empty() == false) {
             m_pcListActors->clear();
             for (auto& itActor : movieInfo.setActors) {
-                QPixmap pix(qstrActorPath + "\\" + QString(itActor.c_str()) + ".jpg");
+                QString qstrFileName = qstrActorPath + "\\" + QString(itActor.c_str()) + ".jpg";
+                QFileInfo file(qstrFileName);
+                QPixmap pix;
+                if (file.exists() == false)
+                    pix.load(qstrActorPath + "\\NoPic.jpg");
+                else
+                    pix.load(qstrFileName);
                 QIcon ic(pix);
                 QListWidgetItem* item = new QListWidgetItem(ic, itActor.c_str(), m_pcListActors);
                 m_pcListActors->addItem(item);

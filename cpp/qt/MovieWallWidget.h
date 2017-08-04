@@ -45,6 +45,8 @@ namespace amms {
 
     private:
         std::map<std::string, QListWidgetItem*> m_mapFile2Item;
+        std::map<std::string, QListWidgetItem*> m_mapSn2Item;
+        std::map<std::string, std::map<std::string, QListWidgetItem*> > m_mapDate2Item;
     };
 }
 
