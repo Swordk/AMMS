@@ -40,6 +40,8 @@ namespace amms {
 
     public slots:
         void slotItemDoubleClicked(QListWidgetItem *item);
+        void slotSortBySn(bool bEsc);
+        void slotSortByDate(bool bEsc);
 
         void slotEventFromParent(CEventObject);
 

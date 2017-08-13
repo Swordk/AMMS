@@ -96,6 +96,44 @@ namespace amms {
         emit signalItemSelected(listStr[0]);
     }
 
+    void CMovieWallWidget::slotSortBySn(bool bEsc)
+    {
+        while(this->count() != 0)
+        {
+            this->takeItem(0);
+        }
+        if (bEsc) {
+            for (auto& item : m_mapSn2Item)
+                this->addItem(item.second);
+        }
+        else {
+            for (auto item = m_mapSn2Item.rbegin(); item != m_mapSn2Item.rend(); ++item)
+                this->addItem(item->second);
+        }
+
+    }
+
+    void CMovieWallWidget::slotSortByDate(bool bEsc)
+    {
+        while(this->count() != 0)
+        {
+            this->takeItem(0);
+        }
+
+        if (bEsc) {
+            for (auto& itemDate : m_mapDate2Item) {
+                for (auto& item : itemDate.second)
+                    this->addItem(item.second);
+            }
+        }
+        else {
+            for (auto itemDate = m_mapDate2Item.rbegin(); itemDate != m_mapDate2Item.rend(); ++itemDate) {
+                for (auto& item : itemDate->second)
+                    this->addItem(item.second);
+            }
+        }
+    }
+
     void CMovieWallWidget::slotEventFromParent(CEventObject objEvent)
     {
         auto pcEvent = objEvent.GetEvent();

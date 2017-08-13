@@ -71,6 +71,9 @@ namespace amms {
         m_pcActorInfoWidget = new CActorInfoWidget(pcWidget);
         m_pcActorInfoWidget->Init();
 
+        m_pcMovieWallSortCtlWidget = new CMovieWallSortCtlWidget(pcWidget);
+        m_pcMovieWallSortCtlWidget->Init();
+
         m_pcMovieWall = new CMovieWallWidget(pcWidget);
         QSize qsize;
         qsize.setWidth(CFG()->MovieFrameWidth());
@@ -78,6 +81,7 @@ namespace amms {
         m_pcMovieWall->Init(qsize);
 
         pcLayout->addWidget(m_pcActorInfoWidget);
+        pcLayout->addWidget(m_pcMovieWallSortCtlWidget);
         pcLayout->addWidget(m_pcMovieWall);
 
         this->setCentralWidget(pcMainSplitter);
@@ -116,6 +120,9 @@ namespace amms {
         connect(this, SIGNAL(signalEventToSelf(CEventObject)), this, SLOT(slotEventFromSelf(CEventObject)));
         connect(m_pcMovieWall, SIGNAL(signalEventToParent(CEventObject)), this, SLOT(slotEventFromChild(CEventObject)));
         connect(this, SIGNAL(signalEventToChild(CEventObject)), m_pcMovieWall, SLOT(slotEventFromParent(CEventObject)));
+        connect(m_pcMovieWallSortCtlWidget, SIGNAL(signalSortBySn(bool)), m_pcMovieWall, SLOT(slotSortBySn(bool)));
+        connect(m_pcMovieWallSortCtlWidget, SIGNAL(signalSortByDate(bool)), m_pcMovieWall, SLOT(slotSortByDate(bool)));
+
 
         RegisterEventProcesser(etRspLoadPic);
 

@@ -22,6 +22,7 @@ SOURCES += \
     CommonContentListWidget.cpp \
     ActorInfoWidget.cpp \
     MovieWallWidget.cpp \
+    MovieWallSortCtlWidget.cpp \
     MovieInfoWindow.cpp \
     AMMSAppWindow.cpp \
     PicCache.cpp \
@@ -41,6 +42,7 @@ HEADERS  += \
     CommonContentListWidget.h \
     ActorInfoWidget.h \
     MovieWallWidget.h \
+    MovieWallSortCtlWidget.h \
     MovieInfoWindow.h \
     AMMSAppWindow.h \
     PicCache.h \
@@ -50,7 +52,7 @@ HEADERS  += \
 
 win32 {
     BOOST_VERSION = 1_61
-    IS_DEBUG=-gd
+    IS_DEBUG=
     BOOST_DIR = C:/boost/boost_$${BOOST_VERSION}_0
     BOOST_LIB_DIR = $${BOOST_DIR}/stage/lib
     LIBS += -l$${BOOST_LIB_DIR}/libboost_atomic-vc120-mt$${IS_DEBUG}-$${BOOST_VERSION} \

@@ -23,6 +23,7 @@
 #include "CommonContentListWidget.h"
 #include "ActorInfoWidget.h"
 #include "MovieWallWidget.h"
+#include "MovieWallSortCtlWidget.h"
 #include "MovieInfoWindow.h"
 
 namespace amms {
@@ -72,6 +73,7 @@ namespace amms {
         CCommonContentListWidget*   m_pcSnList;             // 番号列表
         CActorInfoWidget*           m_pcActorInfoWidget;
         CMovieWallWidget*           m_pcMovieWall;
+        CMovieWallSortCtlWidget*    m_pcMovieWallSortCtlWidget;
         CMovieInfoWindow*           m_pcMovieInfoWindow;
     };
 }
