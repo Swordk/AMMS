@@ -17,6 +17,7 @@
 #include <QMainWindow>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QAction>
 #include "EventProcesser.h"
 #include "EventObject.h"
 #include "ActorsListWidget.h"
@@ -25,6 +26,7 @@
 #include "MovieWallWidget.h"
 #include "MovieWallSortCtlWidget.h"
 #include "MovieInfoWindow.h"
+#include "ScanDiskProcesser.h"
 
 namespace amms {
     class CAMMSAppWindow : public QMainWindow, public CEventProcesser {
@@ -60,17 +62,22 @@ namespace amms {
         void slotEventFromSelf(CEventObject);
         void slotEventFromChild(CEventObject);
 
+        void slotFreeMem();
+        void slotScanDisk();
+
     private:
         void Movies2MovieWall(const std::set<std::string>& setMovies);
 
 
     private:
         // map<string, QListWidgetItem*> m_mapFile2Item;
-
+        CScanDiskProcesser*         m_pcScanDiskProcesser;
         CActorsListWidget*          m_pcActorsList;         // 演员列表
         CCommonContentListWidget*   m_pcSeriesList;         // 系列列表
         CCommonContentListWidget*   m_pcGenresList;         // 类别列表
         CCommonContentListWidget*   m_pcSnList;             // 番号列表
+
+        QAction*                    m_pcScanDisk;
         CActorInfoWidget*           m_pcActorInfoWidget;
         CMovieWallWidget*           m_pcMovieWall;
         CMovieWallSortCtlWidget*    m_pcMovieWallSortCtlWidget;

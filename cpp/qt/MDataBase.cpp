@@ -7,6 +7,8 @@
 #include "MDataBase.h"
 #include <fstream>
 #include <sstream>
+#include <vector>
+#include <boost/algorithm/string.hpp>
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
@@ -74,7 +76,7 @@ namespace amms {
     #define LoadProducers2Sn(mapProducers2Sn)   CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\producers_2_sn.json", mapProducers2Sn)
     #define LoadPublisher2Sn(mapPublisher2Sn)   CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\publisher_2_sn.json", mapPublisher2Sn)
     #define LoadS2Sn(mapS2Sn)                   CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\S_2_sn.json", mapS2Sn)
-    #define LaodSeries2Sn(mapSeries2Sn)         CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\series_2_sn.json", mapSeries2Sn)
+    #define LoadSeries2Sn(mapSeries2Sn)         CJsonFileHandler::LoadKey2List(CFG()->DbPath() + "\\series_2_sn.json", mapSeries2Sn)
     #define LoadMovies(mapMovies)               CJsonFileHandler::LoadKey2Key2List(CFG()->DbPath() + "\\movies.json", mapMovies)
 }
 
@@ -104,10 +106,25 @@ namespace amms {
 
         bRtn = LoadS2Sn(mapS2Sn);
 
-        bRtn = LaodSeries2Sn(mapSeries2Sn);
+        bRtn = LoadSeries2Sn(mapSeries2Sn);
 
         // bRtn = LoadMovies(mapMovies);
     }
+
+
+    void CMDataBase::AddDiskMovie(const std::string& strMovieSn)
+    {
+        std::vector<std::string> vecStrings;
+        boost::split(vecStrings, strMovieSn, boost::is_any_of("-"));
+        if (vecStrings.size() != 2)
+            return;
+
+        mapDiskMovies[vecStrings[0]].insert(strMovieSn);
+        if (mapMovies.count(strMovieSn) <= 0)
+            mapDiskMovies["0.NoInfo"].insert(strMovieSn);
+    }
+
+
 
     void CMDataBase::LoadActorsInfo(const std::string& i_strDatabasePath)
     {

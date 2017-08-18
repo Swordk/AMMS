@@ -27,6 +27,7 @@ SOURCES += \
     AMMSAppWindow.cpp \
     PicCache.cpp \
     PicLoader.cpp \
+    ScanDiskProcesser.cpp \
     AMMS.cpp
 
 HEADERS  += \
@@ -47,13 +48,14 @@ HEADERS  += \
     AMMSAppWindow.h \
     PicCache.h \
     PicLoader.h \
+    ScanDiskProcesser.h \
     AMMS.h
 
 
 win32 {
     RC_FILE += ammsVersion.rc
     BOOST_VERSION = 1_61
-    IS_DEBUG=
+    IS_DEBUG=-gd
     BOOST_DIR = C:/boost/boost_$${BOOST_VERSION}_0
     BOOST_LIB_DIR = $${BOOST_DIR}/stage/lib
     LIBS += -l$${BOOST_LIB_DIR}/libboost_atomic-vc120-mt$${IS_DEBUG}-$${BOOST_VERSION} \

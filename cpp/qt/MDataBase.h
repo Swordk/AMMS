@@ -119,6 +119,19 @@ namespace amms {
         //     return std::map<std::string, std::set<std::string> >();
         // }
 
+        inline std::map<std::string, std::set<std::string> >& DiskMovies() {
+            return mapDiskMovies;
+        }
+        inline std::set<std::string> DiskMovies(const std::string& strS) const {
+            if (mapDiskMovies.count(strS))
+                return mapDiskMovies.at(strS);
+            return std::set<std::string>();
+        }
+
+    public:
+        void AddDiskMovie(const std::string& strMovieSn);
+
+
     private:
         CMDataBase()    {}
         void LoadMoviesInfo(const std::string& i_strDatabasePath);
@@ -135,6 +148,7 @@ namespace amms {
         std::map<std::string, std::set<std::string> >   mapS2Sn;
         std::map<std::string, std::set<std::string> >   mapSeries2Sn;
 
+        std::map<std::string, std::set<std::string> >   mapDiskMovies;
     };
 
 #define MDB CMDataBase::GetInstance

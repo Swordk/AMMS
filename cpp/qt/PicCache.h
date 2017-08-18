@@ -21,6 +21,11 @@ namespace amms {
         virtual ~CPicCache(){}
 
     public:
+        inline void FreeMem() {
+            writeLock wl(m_mtxPixmap);
+            m_mapPixmap.clear();
+        }
+
         bool LoadPixmap(const std::string& strFileName);
 
         bool GetPixmap(const std::string& strFileName, QPixmap& o_pix);

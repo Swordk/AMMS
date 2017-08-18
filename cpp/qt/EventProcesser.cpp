@@ -46,7 +46,7 @@ namespace amms {
                 CEventPtr pcEvent = m_queueEvents.front();
                 m_queueEvents.pop();
                 m_mtxEvents.unlock();
-                if (pcEvent && pcEvent->Type() == etStopEventProcesser) {
+                if (pcEvent && pcEvent->Type() == etCmdStopEventProcesser) {
                     m_bRunningFlag = false;
                     break;
                 }

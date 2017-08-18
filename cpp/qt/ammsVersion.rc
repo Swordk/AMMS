@@ -6,7 +6,7 @@
 
 VS_VERSION_INFO VERSIONINFO
 
-    FILEVERSION 0,0,0,5
+    FILEVERSION 0,0,0,6
     FILEFLAGSMASK 0x3fL
 
 #ifdef _DEBUG
@@ -28,7 +28,7 @@ VS_VERSION_INFO VERSIONINFO
                 VALUE "LegalCopyright", "Copyright (C) 2017-2022"
                 VALUE "OriginalFilename", ""
                 VALUE "ProductName", "amms"
-                VALUE "ProductVersion", "beta 0.0.0.5"
+                VALUE "ProductVersion", "beta.0.0.0.6"
 
             END
         END

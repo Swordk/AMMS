@@ -24,9 +24,12 @@ namespace amms {
 
     // -------------------------------------------------------------------
     enum EU_EventType {
-        etStopEventProcesser = 0,
+        etCmdStopEventProcesser = 0,
+        etCmdStartScanDisk,
+        etCmdStopScanDisk,
+        etRspMovieScanFinished,
         etReqLoadPic,
-        etRspLoadPic
+        etRspLoadPic,
     };
 
     //////////////////////////////////////////////////////////////////////////
@@ -87,7 +90,6 @@ namespace amms {
         bool m_bSuccess;
 
     };
-
 
     // BOOST_SERIALIZATION_ASSUME_ABSTRACT(CEvent)
     typedef boost::shared_ptr<CEvent> CEventPtr;

@@ -14,6 +14,8 @@
 #include <QLabel>
 #include <QListWidgetItem>
 #include <QTableWidget>
+#include <QMenu>
+#include <QMenuBar>
 
 #include "AMMSAppWindow.h"
 #include "Config.h"
@@ -26,6 +28,21 @@ namespace amms {
     void CAMMSAppWindow::Init()
     {
         // UI
+        // Menu
+        QAction* pcFreeMem = new QAction(QStringLiteral("释放内存"), this);
+        pcFreeMem->setShortcut(tr("Ctrl+M"));
+        connect(pcFreeMem, SIGNAL(triggered()), this, SLOT(slotFreeMem()));
+        m_pcScanDisk = new QAction(QStringLiteral("开始扫描磁盘"), this);
+        m_pcScanDisk->setShortcut(tr("Ctrl+S"));
+        connect(m_pcScanDisk, SIGNAL(triggered()), this, SLOT(slotScanDisk()));
+
+        QMenuBar* pcMenuBar = this->menuBar();
+        QMenu* pcOperateMenu = pcMenuBar->addMenu(QStringLiteral("操作"));
+        pcOperateMenu->addAction(m_pcScanDisk);
+        QMenu* pcPerformanceMenu = pcMenuBar->addMenu(QStringLiteral("性能"));
+        pcPerformanceMenu->addAction(pcFreeMem);
+
+        // Window
         QSplitter* pcMainSplitter = new QSplitter(Qt::Horizontal, this);
         pcMainSplitter->setHandleWidth(1);
         pcMainSplitter->setStyleSheet("QSplitter::handle { background-color: lightgray }"); //设置分界线的样式
@@ -56,6 +73,9 @@ namespace amms {
 
         m_pcSnList = new CCommonContentListWidget(this);
         m_pcSnList->Init(QStringLiteral("番号").toStdString());
+        std::map<std::string, int> mapDesc;
+        mapDesc[QStringLiteral("执行： [操作] -> [扫描]").toStdString()] = 0;
+        m_pcSnList->SetContents(mapDesc);
         nWidth = m_pcSnList->GetTotalWidth() + 30;
         nTabWidgetWidth = std::max(nTabWidgetWidth, nWidth);
         // m_pcSnList->setMaximumWidth(nWidth);
@@ -89,6 +109,10 @@ namespace amms {
 
 
         // Datas
+        m_pcScanDiskProcesser = new CScanDiskProcesser(m_pcEventRouter);
+        m_pcScanDiskProcesser->Init();
+
+
         auto mapActors2Sn = MDB()->Actors2Sn();
         m_pcActorsList->SetActors(mapActors2Sn);
 
@@ -125,7 +149,7 @@ namespace amms {
 
 
         RegisterEventProcesser(etRspLoadPic);
-
+        RegisterEventProcesser(etRspMovieScanFinished);
     }
 
     void CAMMSAppWindow::slotActorSelected(QString qstrActor)
@@ -155,7 +179,8 @@ namespace amms {
 
     void CAMMSAppWindow::slotSnSelected(QString qstrSn)
     {
-
+        auto& setMovies = MDB()->DiskMovies(qstrSn.toStdString());
+        m_pcMovieWall->SetMovies(setMovies);
     }
 
 
@@ -190,6 +215,16 @@ namespace amms {
             }
             break;
         }
+        case etRspMovieScanFinished: {
+            m_pcScanDisk->setText(QStringLiteral("开始扫描磁盘"));
+            auto& mapDiskMovies = MDB()->DiskMovies();
+            std::map<std::string, int> mapContent2Count;
+            for (auto& item : mapDiskMovies) {
+                mapContent2Count[item.first] = item.second.size();
+            }
+            m_pcSnList->SetContents(mapContent2Count);
+            break;
+        }
         default:
             break;
         }
@@ -204,6 +239,26 @@ namespace amms {
             PostEvent(CEventPtr(new CLoadPicReqEvent(pcReqEvent->m_strFileName)));
             break;
         }
+        }
+    }
+
+    void CAMMSAppWindow::slotFreeMem()
+    {
+        PicCacheInst()->FreeMem();
+    }
+
+    void CAMMSAppWindow::slotScanDisk()
+    {
+        QAction* m_pcScanDisk = qobject_cast<QAction*>(sender());
+        if (!m_pcScanDisk)
+            return;
+        if (m_pcScanDisk->text() == QStringLiteral("开始扫描磁盘")) {
+            m_pcScanDisk->setText(QStringLiteral("停止扫描磁盘"));
+            PostEvent(CEventPtr(new CEvent(etCmdStartScanDisk)));
+        }
+        else {
+            m_pcScanDisk->setText(QStringLiteral("开始扫描磁盘"));
+            m_pcScanDiskProcesser->StopScan();
         }
     }
 
