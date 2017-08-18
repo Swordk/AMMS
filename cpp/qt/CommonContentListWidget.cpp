@@ -31,6 +31,7 @@ namespace amms {
         if (nContentsSize <= 0)
             return;
         this->clearContents();
+        this->setRowCount(0);
 
         int nRowIndex = 0;
         for (auto& item : mapContent2Count) {
