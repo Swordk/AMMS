@@ -51,6 +51,7 @@ HEADERS  += \
 
 
 win32 {
+    RC_FILE += ammsVersion.rc
     BOOST_VERSION = 1_61
     IS_DEBUG=
     BOOST_DIR = C:/boost/boost_$${BOOST_VERSION}_0
