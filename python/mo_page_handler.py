@@ -19,11 +19,11 @@ series_black_list = [
 
 
 # ##################################################################################################
-def page_search_handler(input_movie_sn, web_url = 'avio.pw'):
+def page_search_handler(input_movie_sn, web_url = 'avmo.club'):
     '''
     @introducation: 查找页面处理，找出sn对应的微缩图和网页链接
     @param:
-        web_url:        avio.pw
+        web_url:        avmo.club
         input_movie_sn: Star768, Star-768, star768, STAR768, STAR-768
     @return:
         dict:   ['sn']
@@ -50,7 +50,7 @@ def page_search_handler(input_movie_sn, web_url = 'avio.pw'):
     rtn_movie_base_info = {}
     for href in hrefs_all:
         movie_base_info = href.xpath(u'div[@class="photo-info"]/span/date/text()')
-        if len(movie_base_info) != 2:
+        if len(movie_base_info) != 2 and len(movie_base_info) != 1:
             continue
         sn_splited = movie_base_info[0].split('-')
         if len(sn_splited) != 2 or sn_splited[0].upper() != movie_s or sn_splited[1] != movie_n:
@@ -71,7 +71,7 @@ def page_search_handler(input_movie_sn, web_url = 'avio.pw'):
 # print(rtn)
 # return: {
 #   'sn': 'ABS-221',
-#   'url': 'https://avio.pw/cn/movie/1noy',
+#   'url': 'https://avmo.club/cn/movie/1noy',
 #   'preview_pic': 'https://jp.netcdn.space/digital/video/118abs00221/118abs00221ps.jpg'
 # }
 
@@ -167,7 +167,7 @@ def page_detail_handler(movie_sn, url):
     
     return rtn_detail, actors_info
 
-# rtn = page_detail_handler('ABS-221', 'https://avio.pw/cn/movie/1noy')
+# rtn = page_detail_handler('ABS-221', 'https://avmo.club/cn/movie/1noy')
 # print(rtn)
 # return: (
 #   {
@@ -192,7 +192,7 @@ def page_detail_handler(movie_sn, url):
 #       'title': '天然成分由来あやみ旬果汁100％ あやみ旬果の体液'
 #   },
 #   {
-#       'あやみ旬果': 'https://avio.pw/cn/star/2yl'
+#       'あやみ旬果': 'https://avmo.club/cn/star/2yl'
 #   }
 # )
 
@@ -239,7 +239,7 @@ def page_actor_handler(url):
     return actor_img_url, dict_actor_info
 
 # julia
-# print(page_actor_handler('https://avio.pw/cn/star/2de'))
+# print(page_actor_handler('https://avmo.club/cn/star/2de'))
 # return: (
 #   'https://jp.netcdn.space/mono/actjpgs/julia.jpg',
 #   {
